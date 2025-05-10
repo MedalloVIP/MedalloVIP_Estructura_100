@@ -16,3 +16,7 @@ const resolucionEl = document.getElementById("resolucion");
 
 // Después de conectar y obtener videoTrack:
 mostrarResolucion(videoTrack, resolucionEl);
+
+
+import { iniciarModoDinamico } from "./modo-control.js";
+iniciarModoDinamico("btnModo");
