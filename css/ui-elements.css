@@ -1,1 +1,9 @@
-/* Estilos visuales */
+/* Modo claro */
+.modo-claro {
+  background-color: #f2f2f2;
+  color: #111;
+}
+
+.modo-claro button {
+  color: black !important;
+}
