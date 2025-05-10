@@ -1,0 +1,1 @@
+// Mostrar resolución de video
