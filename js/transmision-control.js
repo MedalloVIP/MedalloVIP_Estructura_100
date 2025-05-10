@@ -8,3 +8,11 @@ import { iniciarMedicionVelocidad } from "./velocidad-control.js";
 
 const velocidadEl = document.getElementById("velocidad");
 iniciarMedicionVelocidad(velocidadEl);
+
+
+import { mostrarResolucion } from "./resolucion-control.js";
+
+const resolucionEl = document.getElementById("resolucion");
+
+// Después de conectar y obtener videoTrack:
+mostrarResolucion(videoTrack, resolucionEl);
