@@ -1,54 +1,27 @@
 // moderación-control.js
 
-// Lista básica de palabras prohibidas (puedes expandirla o cargarla desde servidor)
-const palabrasProhibidas = ["puta", "mierda", "imbécil", "pedo", "asqueroso"];
+import { mostrarNotificacion } from "./notificaciones-control.js";
 
-// Escuchar mensajes en tiempo real desde el chat
+// Lista de palabras prohibidas (puedes ampliar esto luego)
+const palabrasProhibidas = [
+  "puta", "imbécil", "malparido", "maldito", "asqueroso",
+  "mierda", "pedo", "pendejo", "perra", "zorra", "culo"
+];
+
+// Modera un mensaje antes de enviarlo
 function moderarMensaje(mensaje, usuario) {
-  const mensajeEnMinusculas = mensaje.toLowerCase();
+  const texto = mensaje.toLowerCase();
+  const contiene = palabrasProhibidas.some(palabra => texto.includes(palabra));
 
-  const contieneProhibidas = palabrasProhibidas.some(palabra =>
-    mensajeEnMinusculas.includes(palabra)
-  );
+  if (contiene) {
+    // Mostrar alerta al moderador o al mismo usuario
+    mostrarNotificacion("¡Mensaje bloqueado!", `Lenguaje inapropiado detectado de ${usuario}`, "error");
 
-  if (contieneProhibidas) {
-    mostrarAlertaModeración(usuario, mensaje);
-    bloquearTemporalmente(usuario);
-    return false; // mensaje bloqueado
+    console.warn(`Mensaje bloqueado de ${usuario}: ${mensaje}`);
+    return false; // mensaje no permitido
   }
 
   return true; // mensaje permitido
 }
 
-// Mostrar visualmente la alerta en pantalla
-function mostrarAlertaModeración(usuario, mensaje) {
-  const alerta = document.createElement("div");
-  alerta.innerHTML = `
-    <strong style="color:#ff0000;">¡ALERTA DE MODERACIÓN!</strong><br>
-    Usuario: <span style="color:#00ffff;">${usuario}</span><br>
-    Mensaje bloqueado: "${mensaje}"
-  `;
-  alerta.style = `
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: rgba(255, 0, 0, 0.8);
-    color: white;
-    padding: 14px;
-    font-family: sans-serif;
-    border-radius: 10px;
-    z-index: 9999;
-  `;
-
-  document.body.appendChild(alerta);
-  setTimeout(() => alerta.remove(), 5000);
-}
-
-// Simulación de bloqueo temporal
-function bloquearTemporalmente(usuario) {
-  console.warn(`Usuario ${usuario} ha sido silenciado temporalmente.`);
-  // Aquí podrías actualizar Firebase o base de datos real
-}
-
-// Exportar función si quieres llamarla desde otro módulo
 export { moderarMensaje };
