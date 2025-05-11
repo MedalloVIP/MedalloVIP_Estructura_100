@@ -1,6 +1,27 @@
 import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import { app } from "./firebase-config.js";
+import { moderarMensaje } from "./moderación-control.js";
 
+const sendBtn = document.getElementById("sendBtn");
+const chatBox = document.getElementById("chat-box");
+
+function agregarMensajeAlChat(username, message) {
+  const mensajeHTML = `<p><strong style="color:#00ffff;">${username}:</strong> ${message}</p>`;
+  chatBox.innerHTML += mensajeHTML;
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+sendBtn.addEventListener("click", () => {
+  const username = document.getElementById("username").value.trim();
+  const message = document.getElementById("message").value.trim();
+
+  if (!username || !message) return;
+
+  const permitido = moderarMensaje(message, username);
+  if (!permitido) return;
+
+  agregarMensajeAlChat(username, message);
+});
 // Elementos del DOM
 const chatBox = document.getElementById("chat-box");
 const usernameInput = document.getElementById("username");
