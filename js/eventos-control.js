@@ -1,40 +1,21 @@
 // eventos-control.js
 
-const contenedorEventos = document.getElementById("eventos");
+import { mostrarNotificacion } from "./notificaciones-control.js";
 
-const eventosActivos = [
-  {
-    titulo: "Sorteo Semanal",
-    descripcion: "Participa y gana 500 tokens este viernes.",
-    color: "#ff00ff"
-  },
-  {
-    titulo: "Show Especial 2x1",
-    descripcion: "Disfruta doble placer por el mismo precio hoy.",
-    color: "#00ffff"
-  },
-  {
-    titulo: "Fan del Mes",
-    descripcion: "El fan más activo recibirá un regalo VIP.",
-    color: "#ffaa00"
-  }
+// Simulador de eventos del sistema (esto se puede conectar con Firebase más adelante)
+const eventosSimulados = [
+  { tipo: "regalo", mensaje: "¡Recibiste un regalo sexy!", sonido: "éxito" },
+  { tipo: "visita", mensaje: "Alguien acaba de visitar tu perfil", sonido: "info" },
+  { tipo: "reaccion", mensaje: "¡Recibiste un aplauso!", sonido: "éxito" },
+  { tipo: "alerta", mensaje: "¡Tienes una nueva solicitud privada!", sonido: "info" }
 ];
 
-// Renderizar eventos dinámicamente
-function mostrarEventos() {
-  if (!contenedorEventos) return;
-  eventosActivos.forEach(evento => {
-    const box = document.createElement("div");
-    box.style.border = `2px solid ${evento.color}`;
-    box.style.padding = "15px";
-    box.style.marginBottom = "10px";
-    box.style.borderRadius = "12px";
-    box.innerHTML = `
-      <h3 style="color:${evento.color}; margin-bottom: 5px;">${evento.titulo}</h3>
-      <p>${evento.descripcion}</p>
-    `;
-    contenedorEventos.appendChild(box);
-  });
+// Función para lanzar un evento aleatorio (solo para pruebas)
+function lanzarEventoAleatorio() {
+  const evento = eventosSimulados[Math.floor(Math.random() * eventosSimulados.length)];
+  mostrarNotificacion(`Evento: ${evento.tipo}`, evento.mensaje, evento.sonido);
 }
 
-mostrarEventos();
+// Exportar para activar desde otros módulos
+export { lanzarEventoAleatorio };
+
