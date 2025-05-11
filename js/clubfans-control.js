@@ -1,21 +1,16 @@
-const clubStatus = document.getElementById("clubStatus");
-const subscribeBtn = document.getElementById("subscribeBtn");
+// clubfans-control.js
 
-let isSubscribed = false;
+import { mostrarNotificacion } from "./notificaciones-control.js";
 
-function actualizarEstadoClub() {
-  clubStatus.textContent = isSubscribed
-    ? "Miembro del Club de Fans (Nivel Oro)"
-    : "No eres miembro del Club de Fans";
-  clubStatus.style.color = isSubscribed ? "#00ff00" : "#ff4444";
-  subscribeBtn.textContent = isSubscribed ? "Cancelar Suscripción" : "Unirse al Club";
-  subscribeBtn.style.backgroundColor = isSubscribed ? "#ff0044" : "#00ffff";
-}
+const botonUnirse = document.getElementById("subscribeBtn");
+const estadoClub = document.getElementById("clubStatus");
 
-subscribeBtn.onclick = () => {
-  isSubscribed = !isSubscribed;
-  actualizarEstadoClub();
-  // Aquí se puede guardar en Firebase si se desea persistencia
-};
+botonUnirse.addEventListener("click", () => {
+  // Simula que el usuario se une exitosamente
+  estadoClub.innerText = "¡Ya eres parte del Club de Fans!";
+  botonUnirse.disabled = true;
+  botonUnirse.innerText = "Miembro activo";
 
-actualizarEstadoClub();
+  // Mostrar notificación sonora y visual
+  mostrarNotificacion("¡Bienvenido al Club de Fans!", "Disfruta beneficios exclusivos desde ahora", "éxito");
+});
