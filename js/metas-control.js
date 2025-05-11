@@ -1,10 +1,11 @@
 // metas-control.js
+import { mostrarNotificacion } from "./notificaciones-control.js";
 
 // Datos de ejemplo, luego puedes conectar con Firebase o una base real
 const metas = [
-  { nombre: "Meta 1: Gana $50", progreso: 45, meta: 50, premio: "200 tokens" },
+  { nombre: "Meta 1: Gana $50", progreso: 50, meta: 50, premio: "200 tokens" },
   { nombre: "Meta 2: Obtén 5 referidos", progreso: 3, meta: 5, premio: "Bonificación de $10" },
-  { nombre: "Meta 3: Transmite 10 horas", progreso: 8, meta: 10, premio: "Destacado en el ranking" }
+  { nombre: "Meta 3: Transmite 10 horas", progreso: 10, meta: 10, premio: "Destacado en el ranking" }
 ];
 
 function cargarMetas() {
@@ -17,7 +18,7 @@ function cargarMetas() {
 
   metas.forEach((meta, index) => {
     const porcentaje = Math.floor((meta.progreso / meta.meta) * 100);
-    
+
     const bloque = document.createElement("div");
     bloque.className = "meta-item";
     bloque.style = `
@@ -40,6 +41,13 @@ function cargarMetas() {
     `;
 
     contenedor.appendChild(bloque);
+
+    // Notificación si la meta fue completada
+    if (meta.progreso >= meta.meta) {
+      setTimeout(() => {
+        mostrarNotificacion("¡Meta completada!", `${meta.premio} desbloqueado por ${meta.nombre}`, "éxito");
+      }, 500); // pequeño retraso para cargar visualmente
+    }
   });
 }
 
