@@ -1,9 +1,9 @@
 // notificaciones-control.js
 
-// Función principal para mostrar notificaciones
+// Mostrar notificación en pantalla con sonido
 export function mostrarNotificacion(titulo, mensaje, tipo = "info") {
   const contenedor = document.createElement("div");
-  contenedor.className = `notificacion-${tipo}`;
+
   contenedor.style = `
     position: fixed;
     top: 20px;
@@ -17,24 +17,25 @@ export function mostrarNotificacion(titulo, mensaje, tipo = "info") {
     box-shadow: 0 0 15px ${tipo === "éxito" ? "#00ffcc" : "#00ffff"};
     z-index: 9999;
     opacity: 0.95;
-    animation: aparecer 0.5s ease-out;
+    animation: aparecer 0.4s ease-out;
   `;
 
   contenedor.innerHTML = `<strong>${titulo}</strong><br>${mensaje}`;
   document.body.appendChild(contenedor);
 
-  // Sonido (opcional)
+  // Reproduce sonido correspondiente
   reproducirSonido(tipo);
 
-  // Remover después de unos segundos
+  // Elimina después de 4 segundos
   setTimeout(() => {
     contenedor.remove();
   }, 4000);
 }
 
-// Reproducir sonido según tipo
+// Reproduce sonido según el tipo de notificación
 function reproducirSonido(tipo) {
   let audio = new Audio();
+
   if (tipo === "éxito") {
     audio.src = "./sonidos/exito.mp3";
   } else if (tipo === "error") {
@@ -42,6 +43,7 @@ function reproducirSonido(tipo) {
   } else {
     audio.src = "./sonidos/notificacion.mp3";
   }
+
   audio.volume = 0.6;
   audio.play();
 }
