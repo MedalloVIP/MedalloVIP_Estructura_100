@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Historial - MedalloVIP</title>
+  <style>
+    body {
+      background: #000;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 30px;
+    }
+    h2 {
+      color: #00ffff;
+    }
+    .registro {
+      background: rgba(255,255,255,0.05);
+      padding: 12px;
+      border-left: 4px solid #00ffff;
+      margin-bottom: 14px;
+      border-radius: 6px;
+    }
+    .registro small {
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Historial de compras</h2>
+  <div id="zonaHistorialCompras"></div>
+
+  <h2 style="margin-top: 40px;">Movimientos de tokens</h2>
+  <div id="zonaMovimientosTokens"></div>
+
+  <!-- Melizza -->
+  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
+
+  <!-- Notificación -->
+  <div id="notificacionToast" style="
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.8);
+    padding: 12px 18px;
+    border-radius: 10px;
+    color: #00ffff;
+    font-size: 14px;
+    display: none;
+    z-index: 10000;
+  "></div>
+
+  <!-- Scripts -->
+  <script type="module" src="./js/firebase-config.js"></script>
+  <script type="module" src="./js/historial-compras-control.js"></script>
+  <script type="module" src="./js/movimientos-control.js"></script>
+  <script type="module" src="./js/notificaciones-control.js"></script>
+  <script type="module" src="./js/traduccion-control.js"></script>
+  <script type="module" src="./js/melizza-control.js"></script>
+
+</body>
+</html>
