@@ -1,3 +1,76 @@
-<h2>Inventario de Regalos</h2>
-<div id="inventario" style="display:flex; flex-wrap:wrap; justify-content:center;"></div>
-<script type="module" src="./inventario-control.js"></script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inventario - MedalloVIP</title>
+  <style>
+    body {
+      background: #000;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 30px;
+    }
+
+    h2 {
+      color: #00ffff;
+    }
+
+    input, textarea, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 10px;
+      background: #111;
+      color: white;
+    }
+
+    button {
+      background: #00ffff;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .producto {
+      background: rgba(255,255,255,0.05);
+      padding: 14px;
+      border-radius: 10px;
+      margin-top: 20px;
+      border-left: 4px solid #00ffff;
+    }
+
+    .producto img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Gestión de inventario</h2>
+
+  <input type="text" id="nombreProducto" placeholder="Nombre del producto" />
+  <input type="number" id="precioProducto" placeholder="Precio en tokens" />
+  <textarea id="descripcionProducto" rows="3" placeholder="Descripción breve..."></textarea>
+  <input type="file" id="imagenProducto" accept="image/*" />
+  <button id="btnAgregarProducto">Agregar producto</button>
+
+  <h3 style="margin-top: 40px;">Mis productos</h3>
+  <div id="listaInventario"></div>
+
+  <!-- Melizza -->
+  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
+
+  <!-- Scripts -->
+  <script type="module" src="./js/firebase-config.js"></script>
+  <script type="module" src="./js/inventario-control.js"></script>
+  <script type="module" src="./js/melizza-control.js"></script>
+  <script type="module" src="./js/notificaciones-control.js"></script>
+
+</body>
+</html>
