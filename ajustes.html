@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ajustes - MedalloVIP</title>
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 30px;
+    }
+    h2 {
+      color: #00ffff;
+    }
+    .seccion-ajuste {
+      margin-bottom: 30px;
+      border-bottom: 1px solid #222;
+      padding-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: none;
+      background: #111;
+      color: white;
+    }
+    button {
+      margin-top: 14px;
+      padding: 12px;
+      background: #00ffff;
+      color: black;
+      border: none;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Ajustes del sistema</h2>
+
+  <div class="seccion-ajuste">
+    <h3>Idioma</h3>
+    <label for="selectIdioma">Selecciona tu idioma:</label>
+    <select id="selectIdioma">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+      <option value="de">Deutsch</option>
+      <option value="pt">Português</option>
+    </select>
+    <button id="btnCambiarIdioma">Aplicar idioma</button>
+  </div>
+
+  <div class="seccion-ajuste">
+    <h3>Seguridad</h3>
+    <label for="passActual">Contraseña actual</label>
+    <input type="password" id="passActual" placeholder="********">
+    <label for="passNueva">Nueva contraseña</label>
+    <input type="password" id="passNueva" placeholder="********">
+    <button id="btnCambiarPass">Actualizar contraseña</button>
+    <br><br>
+    <label><input type="checkbox" id="activar2FA"> Activar verificación en 2 pasos (simulado)</label>
+  </div>
+
+  <div class="seccion-ajuste">
+    <h3>Verificación</h3>
+    <p>Puedes verificar tu cuenta para acceder a funciones avanzadas.</p>
+    <button onclick="location.href='verificacion.html'">Verificar mi cuenta</button>
+  </div>
+
+  <!-- Melizza -->
+  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
+
+  <!-- Notificación -->
+  <div id="notificacionToast" style="
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.8);
+    padding: 12px 18px;
+    border-radius: 10px;
+    color: #00ffff;
+    font-size: 14px;
+    display: none;
+    z-index: 10000;
+  "></div>
+
+  <!-- Scripts -->
+  <script type="module" src="./js/firebase-config.js"></script>
+  <script type="module" src="./js/configuracion-control.js"></script>
+  <script type="module" src="./js/idioma-control.js"></script>
+  <script type="module" src="./js/seguridad-control.js"></script>
+  <script type="module" src="./js/verificacion-control.js"></script>
+  <script type="module" src="./js/traduccion-control.js"></script>
+  <script type="module" src="./js/melizza-control.js"></script>
+  <script type="module" src="./js/notificaciones-control.js"></script>
+
+</body>
+</html>
