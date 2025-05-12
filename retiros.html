@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retiros - MedalloVIP</title>
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 30px;
+    }
+    h2 {
+      color: #00ffff;
+    }
+    input, select, button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: #111;
+      color: white;
+    }
+    button {
+      background: #00ffff;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .retiro {
+      background: rgba(255,255,255,0.05);
+      border-left: 4px solid #00ffff;
+      padding: 12px;
+      margin-top: 20px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Solicitar retiro</h2>
+
+  <p><strong>Saldo disponible:</strong> <span id="saldoDisponible">8200</span> tokens</p>
+
+  <label for="montoRetiro">Monto a retirar</label>
+  <input type="number" id="montoRetiro" placeholder="Ej: 1500" />
+
+  <label for="metodoPago">Método de pago</label>
+  <select id="metodoPago">
+    <option value="">Selecciona una opción</option>
+    <option value="wallet">Wallet Cripto (USDT, SOL, etc.)</option>
+    <option value="bancaria">Transferencia Bancaria</option>
+    <option value="paypal">PayPal</option>
+  </select>
+
+  <label for="datosPago">Datos del método seleccionado</label>
+  <input type="text" id="datosPago" placeholder="Ej: dirección wallet o cuenta bancaria" />
+
+  <button id="btnSolicitarRetiro">Enviar solicitud</button>
+
+  <div id="historialRetiros"></div>
+
+  <!-- Melizza -->
+  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
+
+  <!-- Notificación -->
+  <div id="notificacionToast" style="
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.8);
+    padding: 12px 18px;
+    border-radius: 10px;
+    color: #00ffff;
+    font-size: 14px;
+    display: none;
+    z-index: 10000;
+  "></div>
+
+  <!-- Scripts -->
+  <script type="module" src="./js/firebase-config.js"></script>
+  <script type="module" src="./js/retiros-control.js"></script>
+  <script type="module" src="./js/notificaciones-control.js"></script>
+  <script type="module" src="./js/traduccion-control.js"></script>
+  <script type="module" src="./js/melizza-control.js"></script>
+
+</body>
+</html>
