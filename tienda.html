@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tienda - MedalloVIP</title>
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+    }
+    .producto {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid #00ffff66;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 20px;
+    }
+    .producto h4 {
+      margin: 0;
+      color: #00ffff;
+    }
+    .producto button {
+      margin-top: 10px;
+      background: #00ffff;
+      color: black;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+    #zonaCarrito {
+      margin-top: 30px;
+      border-top: 1px solid #333;
+      padding-top: 20px;
+    }
+    #btnConfirmarPago, #btnVaciarCarrito {
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #btnConfirmarPago {
+      background: #00ff88;
+      color: black;
+    }
+    #btnVaciarCarrito {
+      background: #ff0044;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Tienda oficial</h2>
+
+  <!-- Productos -->
+  <div class="producto">
+    <h4>Camiseta MedalloVIP</h4>
+    <p>Edición limitada, solo para miembros VIP</p>
+    <button onclick="agregarAlCarrito('Camiseta MedalloVIP', 1200)">Agregar - 1200 tokens</button>
+  </div>
+
+  <div class="producto">
+    <h4>Gorra Oficial</h4>
+    <p>Perfecta para fans y streamers</p>
+    <button onclick="agregarAlCarrito('Gorra Oficial', 800)">Agregar - 800 tokens</button>
+  </div>
+
+  <div class="producto">
+    <h4>Set Sensual VIP</h4>
+    <p>Artículos íntimos exclusivos MedalloVIP</p>
+    <button onclick="agregarAlCarrito('Set Sensual VIP', 2400)">Agregar - 2400 tokens</button>
+  </div>
+
+  <!-- Carrito -->
+  <div id="zonaCarrito"></div>
+  <div><strong>Total:</strong> <span id="totalCarrito">0 tokens</span></div>
+  <button id="btnConfirmarPago">Pagar ahora</button>
+  <button id="btnVaciarCarrito">Vaciar carrito</button>
+
+  <!-- Melizza -->
+  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
+
+  <!-- Notificación -->
+  <div id="notificacionToast" style="
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.8);
+    padding: 12px 18px;
+    border-radius: 10px;
+    color: #00ffff;
+    font-size: 14px;
+    display: none;
+    z-index: 10000;
+  "></div>
+
+  <!-- Scripts -->
+  <script type="module" src="./js/firebase-config.js"></script>
+  <script type="module" src="./js/carrito-control.js"></script>
+  <script type="module" src="./js/pagos-control.js"></script>
+  <script type="module" src="./js/historial-compras-control.js"></script>
+  <script type="module" src="./js/melizza-control.js"></script>
+  <script type="module" src="./js/notificaciones-control.js"></script>
+
+</body>
+</html>
