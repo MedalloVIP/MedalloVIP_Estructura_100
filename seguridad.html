@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seguridad - MedalloVIP</title>
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 30px;
+    }
+
+    h2 {
+      color: #00ffff;
+      margin-bottom: 20px;
+    }
+
+    section {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      border-left: 4px solid #00ffff55;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #00ffff;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background: #111;
+      color: white;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #00ffff;
+      color: black;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      background: #111;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Centro de Seguridad</h2>
+
+  <section>
+    <h3>Autenticación en Dos Pasos</h3>
+    <button id="btnActivar2FA">Activar 2FA</button>
+    <button id="btnDesactivar2FA">Desactivar 2FA</button>
+  </section>
+
+  <section>
+    <h3>Cambiar Contraseña</h3>
+    <label for="nuevaPassword">Nueva Contraseña</label>
+    <input type="password" id="nuevaPassword" placeholder="*********" />
+    <button id="btnCambiarPassword">Cambiar Contraseña</button>
+  </section>
+
+  <section>
+    <h3>Dispositivos / Sesiones Recientes</h3>
+    <ul id="listaSesiones">
+      <!-- Se llena dinámicamente -->
+    </ul>
+  </section>
+
+  <!-- Melizza -->
+  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
+
+  <!-- Scripts -->
+  <script type="module" src="./js/firebase-config.js"></script>
+  <script type="module" src="./js/seguridad-control.js"></script>
+  <script type="module" src="./js/notificaciones-control.js"></script>
+  <script type="module" src="./js/melizza-control.js"></script>
+
+</body>
+</html>
