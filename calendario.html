@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendario - MedalloVIP</title>
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 30px;
+    }
+    h2 {
+      color: #00ffff;
+    }
+    input, textarea, button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: #111;
+      color: white;
+    }
+    button {
+      background: #00ffff;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .evento {
+      margin-top: 20px;
+      background: rgba(255,255,255,0.05);
+      border-left: 4px solid #00ffff;
+      padding: 12px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Calendario de transmisiones</h2>
+
+  <label for="tituloEvento">Título del evento</label>
+  <input type="text" id="tituloEvento" placeholder="Ej: Show VIP del viernes" />
+
+  <label for="fechaEvento">Fecha y hora</label>
+  <input type="datetime-local" id="fechaEvento" />
+
+  <label for="descripcionEvento">Descripción del evento</label>
+  <textarea id="descripcionEvento" rows="4" placeholder="Detalles del show..."></textarea>
+
+  <button id="btnAgregarEvento">Agregar evento</button>
+
+  <h3 style="margin-top: 40px;">Eventos programados:</h3>
+  <div id="listaEventos"></div>
+
+  <!-- Melizza -->
+  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
+
+  <!-- Notificación -->
+  <div id="notificacionToast" style="
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.8);
+    padding: 12px 18px;
+    border-radius: 10px;
+    color: #00ffff;
+    font-size: 14px;
+    display: none;
+    z-index: 10000;
+  "></div>
+
+  <!-- Scripts -->
+  <script type="module" src="./js/firebase-config.js"></script>
+  <script type="module" src="./js/calendario-control.js"></script>
+  <script type="module" src="./js/notificaciones-control.js"></script>
+  <script type="module" src="./js/traduccion-control.js"></script>
+  <script type="module" src="./js/melizza-control.js"></script>
+
+</body>
+</html>
