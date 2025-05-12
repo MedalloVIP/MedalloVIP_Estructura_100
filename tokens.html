@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mis Tokens - MedalloVIP</title>
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 30px;
+    }
+    h2 {
+      color: #00ffff;
+    }
+    .saldo {
+      font-size: 32px;
+      margin-top: 10px;
+      color: #00ffff;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      background: #00ffff;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .registro {
+      background: rgba(255,255,255,0.05);
+      border-left: 4px solid #00ffff;
+      padding: 12px;
+      margin-top: 14px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Tu saldo de tokens</h2>
+  <div class="saldo" id="saldoTokens">0 tokens</div>
+
+  <button onclick="location.href='tienda.html'">Comprar más tokens</button>
+
+  <h3 style="margin-top: 40px;">Movimientos recientes</h3>
+  <div id="zonaMovimientosTokens"></div>
+
+  <!-- Melizza -->
+  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
+
+  <!-- Notificación -->
+  <div id="notificacionToast" style="
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.8);
+    padding: 12px 18px;
+    border-radius: 10px;
+    color: #00ffff;
+    font-size: 14px;
+    display: none;
+    z-index: 10000;
+  "></div>
+
+  <!-- Scripts -->
+  <script type="module" src="./js/firebase-config.js"></script>
+  <script type="module" src="./js/tokens-control.js"></script>
+  <script type="module" src="./js/movimientos-control.js"></script>
+  <script type="module" src="./js/notificaciones-control.js"></script>
+  <script type="module" src="./js/traduccion-control.js"></script>
+  <script type="module" src="./js/melizza-control.js"></script>
+
+</body>
+</html>
