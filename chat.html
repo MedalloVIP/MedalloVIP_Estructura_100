@@ -1,6 +1,90 @@
-<div id="chat-box" style="height: 200px; overflow-y: auto; background: #111; padding: 10px; border-radius: 10px; border: 2px solid #00ffff;"></div>
-<input type="text" id="username" placeholder="Tu nombre" />
-<input type="text" id="message" placeholder="Escribe un mensaje..." />
-<button id="sendBtn">Enviar</button>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat en Vivo - MedalloVIP</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      padding: 20px;
+    }
 
-<script type="module" src="./chat-control.js"></script>
+    h2 {
+      color: #00ffff;
+      margin-bottom: 10px;
+    }
+
+    #chat-box {
+      width: 100%;
+      max-width: 600px;
+      height: 400px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #00ffff33;
+      border-radius: 10px;
+      padding: 10px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+
+    #chat-box div {
+      margin-bottom: 10px;
+      word-wrap: break-word;
+    }
+
+    .chat-inputs {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .chat-inputs input {
+      flex: 1;
+      padding: 10px;
+      background: #111;
+      border: none;
+      border-radius: 8px;
+      color: white;
+    }
+
+    .chat-inputs button {
+      background: #00ffff;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Chat en Vivo</h2>
+
+  <div id="chat-box"></div>
+
+  <div class="chat-inputs">
+    <input type="text" id="username" placeholder="Tu nombre" />
+    <input type="text" id="message" placeholder="Escribe un mensaje..." />
+    <button id="sendBtn">Enviar</button>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="./js/chat-control.js"></script>
+  <script type="module" src="./js/moderacion-control.js"></script>
+  <script type="module" src="./js/notificaciones-control.js"></script>
+  <script type="module" src="./js/melizza-control.js"></script>
+
+</body>
+</html>
