@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soporte - MedalloVIP</title>
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 30px;
+    }
+    h2 {
+      color: #00ffff;
+    }
+    select, textarea, button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: #111;
+      color: white;
+    }
+    button {
+      background: #00ffff;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Centro de Soporte</h2>
+  <p>¿Tienes algún problema o deseas reportar algo? Llena el siguiente formulario:</p>
+
+  <label for="motivoReporte">Motivo del reporte:</label>
+  <select id="motivoReporte">
+    <option value="">Selecciona una opción</option>
+    <option value="tecnico">Error técnico</option>
+    <option value="perfil">Perfil inapropiado</option>
+    <option value="contenido">Contenido ofensivo</option>
+    <option value="fraude">Sospecha de fraude</option>
+    <option value="otro">Otro motivo</option>
+  </select>
+
+  <label for="descripcionReporte">Describe el problema o situación:</label>
+  <textarea id="descripcionReporte" rows="5" placeholder="Cuéntanos qué sucede..."></textarea>
+
+  <button id="btnEnviarReporte">Enviar reporte</button>
+
+  <!-- Melizza -->
+  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
+
+  <!-- Notificación -->
+  <div id="notificacionToast" style="
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.8);
+    padding: 12px 18px;
+    border-radius: 10px;
+    color: #00ffff;
+    font-size: 14px;
+    display: none;
+    z-index: 10000;
+  "></div>
+
+  <!-- Scripts -->
+  <script type="module" src="./js/firebase-config.js"></script>
+  <script type="module" src="./js/reportes-control.js"></script>
+  <script type="module" src="./js/notificaciones-control.js"></script>
+  <script type="module" src="./js/traduccion-control.js"></script>
+  <script type="module" src="./js/melizza-control.js"></script>
+
+</body>
+</html>
