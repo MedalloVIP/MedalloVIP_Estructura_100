@@ -1,80 +1,44 @@
 // login-control.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  GoogleAuthProvider,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+// Firebase config importado desde tu archivo
+import { firebaseConfig } from "./firebase-config.js";
 
-import { app } from "./firebase-config.js";
-import { mostrarNotificacion } from "./notificaciones-control.js";
-
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// Elementos del DOM
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const loginBtn = document.getElementById("loginBtn");
-const registerBtn = document.getElementById("registerBtn");
-const googleBtn = document.getElementById("googleBtn");
+const btnLogin = document.getElementById("btnLogin");
+const btnGoogle = document.getElementById("btnGoogle");
 
-// Registro con correo
-if (registerBtn) {
-  registerBtn.addEventListener("click", () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value.trim();
+btnLogin.addEventListener("click", async () => {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
-        mostrarNotificacion("Registro exitoso", "Bienvenido a MedalloVIP", "éxito");
-      })
-      .catch(error => {
-        mostrarNotificacion("Error de registro", error.message, "error");
-      });
-  });
-}
+  if (!email || !password) {
+    alert("Por favor ingresa todos los campos.");
+    return;
+  }
 
-// Inicio con correo
-if (loginBtn) {
-  loginBtn.addEventListener("click", () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value.trim();
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    localStorage.setItem("usuarioActivo", email);
+    window.location.href = "panel.html";
+  } catch (error) {
+    alert("Error al iniciar sesión: " + error.message);
+    console.error(error);
+  }
+});
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
-        mostrarNotificacion("Bienvenido", `Hola ${userCredential.user.email}`, "éxito");
-      })
-      .catch(error => {
-        mostrarNotificacion("Error al iniciar sesión", error.message, "error");
-      });
-  });
-}
-
-// Inicio con Google
-if (googleBtn) {
-  googleBtn.addEventListener("click", () => {
-    signInWithPopup(auth, provider)
-      .then(result => {
-        const nombre = result.user.displayName || result.user.email;
-        mostrarNotificacion("Sesión iniciada", `Hola ${nombre}`, "éxito");
-      })
-      .catch(error => {
-        mostrarNotificacion("Error con Google", error.message, "error");
-      });
-  });
-}
-
-// Detectar si ya hay usuario logueado
-onAuthStateChanged(auth, user => {
-  if (user) {
-    console.log("Usuario activo:", user.email);
-    localStorage.setItem("usuario", JSON.stringify(user));
-  } else {
-    console.log("No hay sesión activa");
-    localStorage.removeItem("usuario");
+btnGoogle.addEventListener("click", async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    localStorage.setItem("usuarioActivo", user.email);
+    window.location.href = "panel.html";
+  } catch (error) {
+    alert("Error con Google: " + error.message);
+    console.error(error);
   }
 });
