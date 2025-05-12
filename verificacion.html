@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verificación de Cuenta - MedalloVIP</title>
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 30px;
+    }
+    h2 {
+      color: #00ffff;
+    }
+    input, button {
+      width: 100%;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: #111;
+      color: white;
+    }
+    button {
+      background: #00ffff;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Verificación de Identidad</h2>
+  <p>Sube una foto de tu documento y una selfie para validar tu cuenta.</p>
+
+  <label for="docIdentidad">Documento de identidad (foto o PDF):</label>
+  <input type="file" id="docIdentidad" accept=".jpg,.png,.pdf" />
+
+  <label for="selfie">Selfie con documento:</label>
+  <input type="file" id="selfie" accept=".jpg,.png" />
+
+  <button id="btnEnviarVerificacion">Enviar solicitud</button>
+
+  <p id="estadoVerificacion" style="margin-top: 20px; color: #aaa;">Estado actual: no enviado</p>
+
+  <!-- Melizza -->
+  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
+
+  <!-- Notificación -->
+  <div id="notificacionToast" style="
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.8);
+    padding: 12px 18px;
+    border-radius: 10px;
+    color: #00ffff;
+    font-size: 14px;
+    display: none;
+    z-index: 10000;
+  "></div>
+
+  <!-- Scripts -->
+  <script type="module" src="./js/firebase-config.js"></script>
+  <script type="module" src="./js/verificacion-control.js"></script>
+  <script type="module" src="./js/notificaciones-control.js"></script>
+  <script type="module" src="./js/traduccion-control.js"></script>
+  <script type="module" src="./js/melizza-control.js"></script>
+
+</body>
+</html>
