@@ -1,1 +1,120 @@
-<script type="module" src="./modo-control.js"></script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MedalloVIP - Bienvenido</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(ellipse at center, #000000 0%, #0a0a0a 100%);
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 3em;
+      background: linear-gradient(90deg, #00ffff, #ff00ff);
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 10px;
+      animation: aparecer 1.5s ease-out;
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #ccc;
+      margin-bottom: 30px;
+      animation: aparecer 1.8s ease-out;
+    }
+
+    #btnEntrar {
+      padding: 14px 32px;
+      background: #00ffff;
+      color: #000;
+      border: none;
+      border-radius: 30px;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      animation: aparecer 2s ease-out;
+    }
+
+    select {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      background: #111;
+      color: white;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #melizzaBurbuja {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: 0 0 20px #ff00ff99;
+    }
+
+    .brillo-fondo {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #00ffff22, transparent 70%);
+      animation: pulso 4s infinite;
+    }
+
+    @keyframes pulso {
+      0%, 100% { transform: scale(1); opacity: 0.4; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="brillo-fondo"></div>
+
+  <h1>Bienvenido a MedalloVIP</h1>
+  <p>Tu experiencia digital más exclusiva te espera</p>
+
+  <button id="btnEntrar" onclick="entrar()">Entrar al Ecosistema</button>
+
+  <select id="idioma">
+    <option value="es">Español</option>
+    <option value="en">English</option>
+    <option value="pt">Português</option>
+    <option value="fr">Français</option>
+    <option value="de">Deutsch</option>
+  </select>
+
+  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" title="¿Necesitas ayuda?" />
+
+  <script>
+    function entrar() {
+      const idioma = document.getElementById("idioma").value;
+      localStorage.setItem("idiomaSeleccionado", idioma);
+      window.location.href = "login.html";
+    }
+  </script>
+
+</body>
+</html>
