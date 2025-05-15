@@ -95,12 +95,12 @@
 
   <div class="brillo-fondo"></div>
 
-  <h1>Bienvenido a MedalloVIP</h1>
-  <p>Tu experiencia digital más exclusiva te espera</p>
+  <h1 id="titulo">Bienvenido a MedalloVIP</h1>
+  <p id="subtitulo">Tu experiencia digital más exclusiva te espera</p>
 
   <button id="btnEntrar" onclick="entrar()">Entrar al Ecosistema</button>
 
-  <select id="idioma">
+  <select id="idioma" onchange="cambiarIdioma()">
     <option value="es">Español</option>
     <option value="en">English</option>
     <option value="pt">Português</option>
@@ -111,11 +111,59 @@
   <img id="melizzaBurbuja" src="./melizza-burbuja.png" alt="Melizza" title="¿Necesitas ayuda?" />
 
   <script>
+    const traducciones = {
+      es: {
+        titulo: "Bienvenido a MedalloVIP",
+        subtitulo: "Tu experiencia digital más exclusiva te espera",
+        boton: "Entrar al Ecosistema"
+      },
+      en: {
+        titulo: "Welcome to MedalloVIP",
+        subtitulo: "Your most exclusive digital experience awaits",
+        boton: "Enter the Ecosystem"
+      },
+      pt: {
+        titulo: "Bem-vindo ao MedalloVIP",
+        subtitulo: "Sua experiência digital mais exclusiva espera por você",
+        boton: "Entrar no Ecossistema"
+      },
+      fr: {
+        titulo: "Bienvenue sur MedalloVIP",
+        subtitulo: "Votre expérience numérique la plus exclusive vous attend",
+        boton: "Entrer dans l'écosystème"
+      },
+      de: {
+        titulo: "Willkommen bei MedalloVIP",
+        subtitulo: "Dein exklusivstes digitales Erlebnis erwartet dich",
+        boton: "Ökosystem betreten"
+      }
+    };
+
+    function cambiarIdioma() {
+      const idioma = document.getElementById("idioma").value;
+      localStorage.setItem("idiomaSeleccionado", idioma);
+      aplicarTraduccion(idioma);
+    }
+
+    function aplicarTraduccion(idioma) {
+      const t = traducciones[idioma] || traducciones["es"];
+      document.getElementById("titulo").textContent = t.titulo;
+      document.getElementById("subtitulo").textContent = t.subtitulo;
+      document.getElementById("btnEntrar").textContent = t.boton;
+      document.getElementById("idioma").value = idioma;
+    }
+
     function entrar() {
       const idioma = document.getElementById("idioma").value;
       localStorage.setItem("idiomaSeleccionado", idioma);
       window.location.href = "login.html";
     }
+
+    // Aplicar idioma al cargar
+    window.onload = () => {
+      const idiomaGuardado = localStorage.getItem("idiomaSeleccionado") || "es";
+      aplicarTraduccion(idiomaGuardado);
+    };
   </script>
 
   <script type="module" src="./js/idioma-control.js"></script>
