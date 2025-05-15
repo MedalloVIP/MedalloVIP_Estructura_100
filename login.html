@@ -90,18 +90,6 @@
       width: 100%;
     }
 
-    #melizzaBurbuja {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 999;
-      box-shadow: 0 0 15px #ff00ff99;
-    }
-
     @keyframes aparecer {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -121,18 +109,12 @@
       Iniciar sesión con Google
     </button>
 
-    <select id="idioma">
-      <option value="es">Español</option>
-      <option value="en">English</option>
-      <option value="pt">Português</option>
-    </select>
 
     <div class="extra">
       ¿No tienes cuenta? <a href="registro.html" style="color:#00ffff;">Regístrate aquí</a>
     </div>
   </div>
 
-  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
 
   <!-- Scripts principales -->
   <script type="module" src="./js/firebase-config.js"></script>
