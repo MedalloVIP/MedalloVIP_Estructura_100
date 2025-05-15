@@ -64,18 +64,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    #melizzaBurbuja {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 999;
-      box-shadow: 0 0 20px #ff00ff99;
-    }
-
     .brillo-fondo {
       position: absolute;
       width: 600px;
@@ -107,8 +95,6 @@
     <option value="fr">Français</option>
     <option value="de">Deutsch</option>
   </select>
-
-  <img id="melizzaBurbuja" src="./melizza-burbuja.png" alt="Melizza" title="¿Necesitas ayuda?" />
 
   <script>
     const traducciones = {
@@ -159,16 +145,15 @@
       window.location.href = "login.html";
     }
 
-    // Aplicar idioma al cargar
+    // Al cargar la página
     window.onload = () => {
       const idiomaGuardado = localStorage.getItem("idiomaSeleccionado") || "es";
       aplicarTraduccion(idiomaGuardado);
     };
   </script>
 
+  <!-- Scripts adicionales opcionales -->
   <script type="module" src="./js/idioma-control.js"></script>
-  <script type="module" src="./js/melizza-control.js"></script>
-  <script type="module" src="./js/notificaciones-control.js"></script>
   <script type="module" src="./js/index-control.js"></script>
 
 </body>
