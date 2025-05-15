@@ -20,6 +20,7 @@
       height: 100vh;
       overflow: hidden;
       position: relative;
+      text-align: center;
     }
 
     h1 {
@@ -88,7 +89,7 @@
 
   <button id="btnEntrar" onclick="entrar()">Entrar al Ecosistema</button>
 
-  <select id="idioma" onchange="cambiarIdioma()">
+  <select id="idioma">
     <option value="es">Español</option>
     <option value="en">English</option>
     <option value="pt">Português</option>
@@ -125,18 +126,17 @@
       }
     };
 
-    function cambiarIdioma() {
-      const idioma = document.getElementById("idioma").value;
-      localStorage.setItem("idiomaSeleccionado", idioma);
-      aplicarTraduccion(idioma);
-    }
-
     function aplicarTraduccion(idioma) {
       const t = traducciones[idioma] || traducciones["es"];
       document.getElementById("titulo").textContent = t.titulo;
       document.getElementById("subtitulo").textContent = t.subtitulo;
       document.getElementById("btnEntrar").textContent = t.boton;
-      document.getElementById("idioma").value = idioma;
+    }
+
+    function cambiarIdioma() {
+      const idiomaSeleccionado = document.getElementById("idioma").value;
+      localStorage.setItem("idiomaSeleccionado", idiomaSeleccionado);
+      aplicarTraduccion(idiomaSeleccionado);
     }
 
     function entrar() {
@@ -146,15 +146,12 @@
     }
 
     // Al cargar la página
-    window.onload = () => {
+    window.addEventListener("DOMContentLoaded", () => {
       const idiomaGuardado = localStorage.getItem("idiomaSeleccionado") || "es";
+      document.getElementById("idioma").value = idiomaGuardado;
       aplicarTraduccion(idiomaGuardado);
-    };
+    });
   </script>
-
-  <!-- Scripts adicionales opcionales -->
-  <script type="module" src="./js/idioma-control.js"></script>
-  <script type="module" src="./js/index-control.js"></script>
 
 </body>
 </html>
