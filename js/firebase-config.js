@@ -1,8 +1,9 @@
 // firebase-config.js
 
+// Importar la función de inicialización desde Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 
-// Configuración de Firebase para MedalloVIP
+// Configuración oficial de Firebase para MedalloVIP
 const firebaseConfig = {
   apiKey: "AIzaSyC5GDaZOlXK8xZKgr2wShlQ1_fh6k6O-0g",
   authDomain: "medallovip.firebaseapp.com",
@@ -14,8 +15,8 @@ const firebaseConfig = {
   databaseURL: "https://medallovip-default-rtdb.firebaseio.com"
 };
 
-// Inicializar Firebase
+// Inicializar la app de Firebase
 const app = initializeApp(firebaseConfig);
 
-// Exportar para usar en otros módulos
+// Exportar la instancia para usar en otros módulos (como login-control.js o registro-control.js)
 export { app };
