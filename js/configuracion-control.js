@@ -1,61 +1,53 @@
 // configuracion-control.js
 
-const menuBtn = document.getElementById("btnAjustes");
-const menuContenedor = crearMenuConfiguracion();
+import { mostrarNotificacion } from "./notificaciones-control.js";
 
-menuBtn?.addEventListener("click", () => {
-  menuContenedor.style.display = menuContenedor.style.display === "none" ? "block" : "none";
-});
+const selectorTema = document.getElementById("selectorTema");
+const selectorIdioma = document.getElementById("selectorIdioma");
+const toggleNotificaciones = document.getElementById("toggleNotificaciones");
 
-// Crear menú completo
-function crearMenuConfiguracion() {
-  const contenedor = document.createElement("div");
-  contenedor.id = "menuConfiguracion";
-  contenedor.style = `
-    position: fixed;
-    top: 70px;
-    right: 20px;
-    background: rgba(0,0,0,0.9);
-    border: 1px solid #00ffff;
-    border-radius: 12px;
-    padding: 16px;
-    color: white;
-    z-index: 9999;
-    display: none;
-    width: 260px;
-    font-family: sans-serif;
-  `;
+// Aplicar configuración al cargar
+function aplicarConfiguracion() {
+  const tema = localStorage.getItem("temaApp") || "oscuro";
+  const idioma = localStorage.getItem("idiomaApp") || "es";
+  const notificaciones = localStorage.getItem("notificacionesApp") !== "false";
 
-  const opciones = [
-    "Lenguaje",
-    "Tema de la aplicación",
-    "Verificación",
-    "Cuenta",
-    "Privacidad",
-    "Avatar",
-    "Favoritos",
-    "Chats",
-    "Soporte en línea",
-    "AI Melizza",
-    "Notificaciones",
-    "Ayuda",
-    "Invita"
-  ];
+  document.body.classList.toggle("tema-claro", tema === "claro");
 
-  opciones.forEach(opcion => {
-    const item = document.createElement("div");
-    item.textContent = opcion;
-    item.style = `
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      cursor: pointer;
-    `;
-    item.addEventListener("click", () => {
-      console.log(`Seleccionaste: ${opcion}`);
-    });
-    contenedor.appendChild(item);
-  });
+  if (selectorTema) selectorTema.value = tema;
+  if (selectorIdioma) selectorIdioma.value = idioma;
+  if (toggleNotificaciones) toggleNotificaciones.checked = notificaciones;
 
-  document.body.appendChild(contenedor);
-  return contenedor;
+  mostrarNotificacion("Configuración aplicada", "Tus preferencias han sido restauradas", "info");
 }
+
+// Guardar preferencias
+function guardarConfiguracion() {
+  const tema = selectorTema?.value || "oscuro";
+  const idioma = selectorIdioma?.value || "es";
+  const notificaciones = toggleNotificaciones?.checked;
+
+  localStorage.setItem("temaApp", tema);
+  localStorage.setItem("idiomaApp", idioma);
+  localStorage.setItem("notificacionesApp", notificaciones);
+
+  document.body.classList.toggle("tema-claro", tema === "claro");
+
+  mostrarNotificacion("Preferencias guardadas", "Tus ajustes se han aplicado correctamente", "success");
+}
+
+// Inicializar controles de configuración
+function inicializarConfiguracion() {
+  if (!selectorTema || !selectorIdioma || !toggleNotificaciones) {
+    console.warn("Faltan elementos de configuración en el DOM.");
+    return;
+  }
+
+  aplicarConfiguracion();
+
+  selectorTema.addEventListener("change", guardarConfiguracion);
+  selectorIdioma.addEventListener("change", guardarConfiguracion);
+  toggleNotificaciones.addEventListener("change", guardarConfiguracion);
+}
+
+window.addEventListener("DOMContentLoaded", inicializarConfiguracion);
