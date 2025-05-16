@@ -2,80 +2,72 @@
 
 import { mostrarNotificacion } from "./notificaciones-control.js";
 
-const claveCarrito = "carritoMedalloVIP";
-const contenedorCarrito = document.getElementById("zonaCarrito");
+const listaCarrito = document.getElementById("listaCarrito");
 const totalCarrito = document.getElementById("totalCarrito");
-const btnVaciarCarrito = document.getElementById("btnVaciarCarrito");
 
-// Obtener productos
-function obtenerCarrito() {
-  const data = localStorage.getItem(claveCarrito);
-  return data ? JSON.parse(data) : [];
-}
-
-// Guardar productos
-function guardarCarrito(lista) {
-  localStorage.setItem(claveCarrito, JSON.stringify(lista));
-}
+let carrito = [];
 
 // Agregar producto al carrito
 function agregarAlCarrito(nombre, precio) {
-  const productos = obtenerCarrito();
-  productos.push({ nombre, precio });
-  guardarCarrito(productos);
-  mostrarNotificacion("Producto añadido", `${nombre} se añadió al carrito`, "éxito");
-  mostrarCarrito();
+  const producto = { nombre, precio };
+  carrito.push(producto);
+  actualizarCarrito();
+  mostrarNotificacion("Producto añadido", `${nombre} agregado al carrito`, "success");
 }
 
-// Mostrar el carrito visualmente
-function mostrarCarrito() {
-  const productos = obtenerCarrito();
+// Eliminar producto del carrito
+function eliminarDelCarrito(index) {
+  const eliminado = carrito.splice(index, 1);
+  actualizarCarrito();
+  mostrarNotificacion("Producto eliminado", `${eliminado[0].nombre} fue retirado`, "warning");
+}
+
+// Calcular total y renderizar
+function actualizarCarrito() {
+  if (!listaCarrito || !totalCarrito) return;
+
+  listaCarrito.innerHTML = "";
   let total = 0;
 
-  if (!contenedorCarrito) return;
-
-  contenedorCarrito.innerHTML = "";
-
-  productos.forEach((p, i) => {
-    const item = document.createElement("div");
-    item.className = "item-carrito";
-    item.style = `
-      padding: 10px;
-      margin-bottom: 6px;
-      background: rgba(255,255,255,0.05);
-      border-left: 3px solid #00ffff;
+  carrito.forEach((item, index) => {
+    const fila = document.createElement("div");
+    fila.className = "item-carrito";
+    fila.style = `
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      background: #111;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: white;
     `;
-    item.innerHTML = `
-      ${p.nombre} - <strong>${p.precio} tokens</strong>
-      <button onclick="eliminarDelCarrito(${i})" style="float:right; color:red;">✖</button>
+
+    fila.innerHTML = `
+      <span>${item.nombre} - <strong style="color:#00ffff">${item.precio} Tokens</strong></span>
+      <button style="background:#ff4444; color:white; border:none; padding:4px 8px; border-radius:5px; cursor:pointer;"
+        onclick="eliminarDelCarrito(${index})">X</button>
     `;
-    contenedorCarrito.appendChild(item);
-    total += p.precio;
+
+    listaCarrito.appendChild(fila);
+    total += item.precio;
   });
 
-  if (totalCarrito) {
-    totalCarrito.textContent = `${total.toLocaleString()} tokens`;
-  }
+  totalCarrito.textContent = `Total: ${total} Tokens`;
 }
 
-// Eliminar un producto
-window.eliminarDelCarrito = function(index) {
-  const productos = obtenerCarrito();
-  productos.splice(index, 1);
-  guardarCarrito(productos);
-  mostrarCarrito();
-  mostrarNotificacion("Producto eliminado", "Item removido del carrito", "info");
-};
+// Inicialización global
+function inicializarCarrito() {
+  if (!listaCarrito || !totalCarrito) {
+    console.warn("Elementos del carrito no encontrados.");
+    return;
+  }
 
-// Vaciar carrito completo
-btnVaciarCarrito?.addEventListener("click", () => {
-  guardarCarrito([]);
-  mostrarCarrito();
-  mostrarNotificacion("Carrito vacío", "Todos los productos fueron eliminados", "info");
-});
+  actualizarCarrito(); // por si hay productos preagregados
+}
 
-// Cargar al inicio
-window.addEventListener("DOMContentLoaded", mostrarCarrito);
+// Exponer funciones globales si se llama desde botones externos
+window.agregarAlCarrito = agregarAlCarrito;
+window.eliminarDelCarrito = eliminarDelCarrito;
 
-// Exportar función para uso externo
-export { agregarAlCarrito };
+// Iniciar en carga
+window.addEventListener("DOMContentLoaded", inicializarCarrito);
