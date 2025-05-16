@@ -1,72 +1,68 @@
 // calendario-control.js
 
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { app } from "./firebase-config.js";
 import { mostrarNotificacion } from "./notificaciones-control.js";
 
-const eventosClave = "agendaEventosMedallo";
-const inputTitulo = document.getElementById("tituloEvento");
-const inputFecha = document.getElementById("fechaEvento");
-const inputDescripcion = document.getElementById("descripcionEvento");
-const btnAgregar = document.getElementById("btnAgregarEvento");
-const listaEventos = document.getElementById("listaEventos");
+const auth = getAuth(app);
+const visorCalendario = document.getElementById("calendarioEventos");
 
-// Obtener eventos guardados
-function obtenerEventos() {
-  const data = localStorage.getItem(eventosClave);
-  return data ? JSON.parse(data) : [];
-}
+// Eventos simulados (se pueden integrar desde Firestore después)
+const eventosSimulados = [
+  { titulo: "Show privado con Valentina", fecha: "2025-05-16", hora: "20:00", tipo: "show" },
+  { titulo: "Concurso Top Model Semanal", fecha: "2025-05-17", hora: "18:00", tipo: "concurso" },
+  { titulo: "Sesión AMA (Pregúntame lo que sea)", fecha: "2025-05-18", hora: "21:00", tipo: "interacción" }
+];
 
-// Guardar lista de eventos
-function guardarEventos(lista) {
-  localStorage.setItem(eventosClave, JSON.stringify(lista));
-}
+// Mostrar eventos en el calendario
+function renderizarEventos(usuario) {
+  if (!visorCalendario) return;
 
-// Agregar nuevo evento
-btnAgregar?.addEventListener("click", () => {
-  const titulo = inputTitulo?.value.trim();
-  const fecha = inputFecha?.value;
-  const descripcion = inputDescripcion?.value.trim();
+  visorCalendario.innerHTML = "";
 
-  if (!titulo || !fecha || !descripcion) {
-    mostrarNotificacion("Campos incompletos", "Debes completar todos los datos", "error");
+  if (eventosSimulados.length === 0) {
+    visorCalendario.innerHTML = "<p style='color:#aaa;'>No hay eventos programados aún.</p>";
     return;
   }
 
-  const nuevoEvento = { titulo, fecha, descripcion };
-  const eventos = obtenerEventos();
-  eventos.push(nuevoEvento);
-  guardarEventos(eventos);
-  mostrarEventos();
-
-  mostrarNotificacion("Evento guardado", `${titulo} agendado con éxito`, "éxito");
-
-  inputTitulo.value = "";
-  inputFecha.value = "";
-  inputDescripcion.value = "";
-});
-
-// Mostrar todos los eventos
-function mostrarEventos() {
-  const eventos = obtenerEventos();
-
-  if (!listaEventos) return;
-  listaEventos.innerHTML = "";
-
-  eventos.forEach(evento => {
+  eventosSimulados.forEach(evento => {
     const item = document.createElement("div");
+    item.className = "evento-calendario";
     item.style = `
-      background: rgba(0,0,0,0.3);
-      padding: 10px;
+      background: #111;
+      border-left: 5px solid #00ffff;
+      padding: 12px;
       margin-bottom: 10px;
-      border-left: 4px solid #00ffff;
       border-radius: 6px;
+      color: white;
     `;
+
     item.innerHTML = `
       <strong>${evento.titulo}</strong><br>
-      <span>${evento.fecha}</span><br>
-      <small>${evento.descripcion}</small>
+      <span style="color: #aaa;">${evento.fecha} — ${evento.hora}</span><br>
+      <span style="color: #ff00ff;">Tipo: ${evento.tipo}</span>
     `;
-    listaEventos.appendChild(item);
+
+    visorCalendario.appendChild(item);
+  });
+
+  mostrarNotificacion("Eventos cargados", `Se encontraron ${eventosSimulados.length} eventos`, "info");
+}
+
+// Inicializar calendario
+function inicializarCalendario() {
+  if (!visorCalendario) {
+    console.warn("No se encontró el visor de calendario.");
+    return;
+  }
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      renderizarEventos(user);
+    } else {
+      visorCalendario.innerHTML = "<p style='color:#aaa;'>Inicia sesión para ver tus eventos.</p>";
+    }
   });
 }
 
-window.addEventListener("DOMContentLoaded", mostrarEventos);
+window.addEventListener("DOMContentLoaded", inicializarCalendario);
