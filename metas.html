@@ -2,70 +2,82 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Metas - MedalloVIP</title>
   <style>
     body {
-      background: #000;
+      background-color: #000;
       color: white;
       font-family: 'Segoe UI', sans-serif;
       padding: 30px;
+      margin: 0;
     }
+
     h2 {
+      text-align: center;
       color: #00ffff;
+      margin-bottom: 30px;
     }
-    .meta-item {
-      background: rgba(255,255,255,0.03);
-      padding: 16px;
-      margin-bottom: 20px;
-      border-radius: 12px;
+
+    #listaMetas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .meta {
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid #00ffff33;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #00ffff22;
+      position: relative;
     }
-    .meta-item h3 {
+
+    .meta h3 {
+      margin: 0 0 10px 0;
       color: #00ffff;
-      margin-bottom: 10px;
     }
-    .meta-item .barra {
-      background: #333;
-      border-radius: 10px;
+
+    .meta p {
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    .meta .progreso {
+      margin-top: 10px;
+      height: 8px;
+      background: #111;
+      border-radius: 8px;
       overflow: hidden;
-      margin: 10px 0;
-      height: 14px;
     }
-    .meta-item .barra div {
+
+    .meta .progreso-barra {
       height: 100%;
-      background: linear-gradient(90deg, #00ffff, #ff00ff);
+      background: #00ffff;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    @media (max-width: 500px) {
+      #listaMetas {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
 
-  <h2 data-i18n="metas">Tus metas activas</h2>
-  <div id="contenedorMetas"></div>
+  <h2>Metas Activas</h2>
 
-  <!-- Melizza -->
-  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
-
-  <!-- Notificación -->
-  <div id="notificacionToast" style="
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    background: rgba(0,0,0,0.8);
-    padding: 12px 18px;
-    border-radius: 10px;
-    color: #00ffff;
-    font-size: 14px;
-    display: none;
-    z-index: 10000;
-  "></div>
+  <div id="listaMetas">
+    <!-- Las metas se cargarán dinámicamente aquí -->
+  </div>
 
   <!-- Scripts -->
   <script type="module" src="./js/firebase-config.js"></script>
   <script type="module" src="./js/metas-control.js"></script>
   <script type="module" src="./js/notificaciones-control.js"></script>
-  <script type="module" src="./js/traduccion-control.js"></script>
-  <script type="module" src="./js/melizza-control.js"></script>
 
 </body>
 </html>
