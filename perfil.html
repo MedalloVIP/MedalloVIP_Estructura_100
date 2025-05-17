@@ -2,101 +2,76 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mi Perfil - MedalloVIP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Perfil - MedalloVIP</title>
   <style>
     body {
       background-color: #000;
       color: white;
       font-family: 'Segoe UI', sans-serif;
+      margin: 0;
       padding: 30px;
     }
+
     h2 {
       color: #00ffff;
       margin-bottom: 20px;
+      text-align: center;
     }
+
+    #infoPerfil {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid #00ffff22;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 8px #00ffff11;
+    }
+
     input, textarea {
       width: 100%;
       padding: 12px;
-      margin-bottom: 14px;
+      margin-top: 10px;
       border-radius: 8px;
-      border: none;
-      outline: none;
       background: #111;
+      border: none;
       color: white;
     }
+
     button {
+      margin-top: 20px;
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       background: #00ffff;
       color: black;
-      border-radius: 8px;
       border: none;
       font-weight: bold;
+      border-radius: 10px;
       cursor: pointer;
-    }
-    .seccion {
-      margin-bottom: 40px;
-      border-bottom: 1px solid #222;
-      padding-bottom: 20px;
     }
   </style>
 </head>
 <body>
 
-  <h2 data-i18n="perfil">Mi Perfil</h2>
+  <h2>Mi Perfil</h2>
 
-  <div class="seccion">
-    <h3>Información personal</h3>
-    <img id="avatarPerfil" src="./imagenes/avatar-default.png" alt="Avatar" width="100" style="border-radius: 50%; margin-bottom: 10px;" />
-    <input type="text" id="inputNombre" placeholder="Tu nombre" />
-    <input type="email" id="inputCorreo" placeholder="Tu correo" />
-    <button id="btnGuardarPerfil">Guardar cambios</button>
+  <div id="infoPerfil">
+    <!-- Aquí se mostrará el resumen cargado -->
+    <p><strong>Nombre:</strong> -</p>
+    <p><strong>Presentación:</strong> -</p>
+    <p><strong>Redes sociales:</strong> -</p>
   </div>
 
-  <div class="seccion">
-    <h3>Biografía</h3>
-    <textarea id="bioInput" rows="4" placeholder="Escribe algo sobre ti..."></textarea>
-    <button id="btnGuardarBio">Guardar biografía</button>
-  </div>
+  <input type="text" id="perfilNombre" placeholder="Tu nombre o seudónimo" />
+  <textarea id="perfilPresentacion" rows="4" placeholder="Preséntate..."></textarea>
+  <input type="text" id="perfilRedes" placeholder="Enlace a tus redes sociales" />
 
-  <div class="seccion">
-    <h3>Privilegios por rol</h3>
-    <div id="seccionPrivilegios" style="color: #aaa;">Cargando privilegios...</div>
-  </div>
+  <button id="btnGuardarPerfil">Guardar perfil</button>
 
-  <!-- Resultado biografía cargada -->
-  <div style="margin-top: 20px; font-style: italic;">
-    <strong>Biografía pública:</strong>
-    <div id="bioUsuario" style="color: #00ffff;"></div>
-  </div>
-
-  <!-- Melizza flotante -->
-  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
-
-  <!-- Notificación -->
-  <div id="notificacionToast" style="
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    background: rgba(0,0,0,0.8);
-    padding: 12px 18px;
-    border-radius: 10px;
-    color: #00ffff;
-    font-size: 14px;
-    display: none;
-    z-index: 10000;
-  "></div>
-
-  <!-- Módulos conectados -->
+  <!-- Scripts -->
   <script type="module" src="./js/firebase-config.js"></script>
   <script type="module" src="./js/perfil-control.js"></script>
-  <script type="module" src="./js/perfil-modelo-control.js"></script>
-  <script type="module" src="./js/perfil-usuario-control.js"></script>
-  <script type="module" src="./js/biografia-control.js"></script>
   <script type="module" src="./js/notificaciones-control.js"></script>
-  <script type="module" src="./js/traduccion-control.js"></script>
-  <script type="module" src="./js/melizza-control.js"></script>
 
 </body>
 </html>
