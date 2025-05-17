@@ -1,49 +1,44 @@
 // modo-control.js
 
-// Al cargar la página, aplicar el modo guardado
-document.addEventListener("DOMContentLoaded", () => {
-  const modoGuardado = localStorage.getItem("modo");
-  if (modoGuardado === "claro") {
-    activarModoClaro();
-  } else {
-    activarModoOscuro(); // por defecto oscuro
-  }
+// Aplica el modo guardado al cargar la página
+window.addEventListener("DOMContentLoaded", () => {
+  const modoGuardado = localStorage.getItem("modoVisual") || "oscuro";
+  aplicarModo(modoGuardado);
+
+  const btn = document.getElementById("modoBtn") || crearBotonModo();
+  btn.textContent = `Modo ${capitalizar(modoGuardado)}`;
+  btn.onclick = alternarModo;
 });
 
-// Cambiar a modo oscuro
-function activarModoOscuro() {
-  document.body.style.backgroundColor = "#000000";
-  document.body.style.color = "#ffffff";
-  localStorage.setItem("modo", "oscuro");
-  actualizarTextoBoton("Oscuro");
+// Alternar entre claro y oscuro
+function alternarModo() {
+  const modoActual = localStorage.getItem("modoVisual") || "oscuro";
+  const nuevoModo = modoActual === "claro" ? "oscuro" : "claro";
+  aplicarModo(nuevoModo);
+  localStorage.setItem("modoVisual", nuevoModo);
+  actualizarTextoBoton(nuevoModo);
 }
 
-// Cambiar a modo claro
-function activarModoClaro() {
-  document.body.style.backgroundColor = "#f5f5f5";
-  document.body.style.color = "#111111";
-  localStorage.setItem("modo", "claro");
-  actualizarTextoBoton("Claro");
-}
-
-// Crear botón flotante si no existe
-const btnModo = document.getElementById("modoBtn") || crearBotonModo();
-
-btnModo.onclick = () => {
-  const modoActual = localStorage.getItem("modo");
-  if (modoActual === "claro") {
-    activarModoOscuro();
+// Aplica el modo al `<body>`
+function aplicarModo(modo) {
+  if (modo === "claro") {
+    document.body.style.backgroundColor = "#f5f5f5";
+    document.body.style.color = "#111111";
   } else {
-    activarModoClaro();
+    document.body.style.backgroundColor = "#000000";
+    document.body.style.color = "#ffffff";
   }
-};
-
-// Actualiza el texto del botón
-function actualizarTextoBoton(modo) {
-  btnModo.textContent = `Modo ${modo}`;
 }
 
-// Crear el botón si no existe aún
+// Cambia el texto del botón según el modo actual
+function actualizarTextoBoton(modo) {
+  const btn = document.getElementById("modoBtn");
+  if (btn) {
+    btn.textContent = `Modo ${capitalizar(modo)}`;
+  }
+}
+
+// Crea el botón si no existe
 function crearBotonModo() {
   const boton = document.createElement("button");
   boton.id = "modoBtn";
@@ -62,7 +57,11 @@ function crearBotonModo() {
     z-index: 9999;
     box-shadow: 0 0 10px #ff00ff;
   `;
-  boton.textContent = "Modo Oscuro";
   document.body.appendChild(boton);
   return boton;
+}
+
+// Capitaliza "claro" → "Claro"
+function capitalizar(texto) {
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
