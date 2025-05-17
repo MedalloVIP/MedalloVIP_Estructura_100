@@ -1,44 +1,87 @@
 // seguridad-control.js
 
-import { getAuth, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  sendEmailVerification,
+  sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
 import { app } from "./firebase-config.js";
 import { mostrarNotificacion } from "./notificaciones-control.js";
 
 const auth = getAuth(app);
+const visorSeguridad = document.getElementById("zonaSeguridad");
+const btnReset = document.getElementById("btnResetPassword");
+const btnVerificacion = document.getElementById("btnVerificarEmail");
 
-const inputActual = document.getElementById("passActual");
-const inputNueva = document.getElementById("passNueva");
-const btnCambiar = document.getElementById("btnCambiarPass");
-const chk2FA = document.getElementById("activar2FA");
+let usuarioActual = null;
 
-btnCambiar?.addEventListener("click", async () => {
-  const actual = inputActual?.value.trim();
-  const nueva = inputNueva?.value.trim();
-  const user = auth.currentUser;
+// Mostrar estado de seguridad
+function mostrarEstadoSeguridad() {
+  if (!usuarioActual || !visorSeguridad) return;
 
-  if (!actual || !nueva) {
-    mostrarNotificacion("Campos incompletos", "Debes llenar ambos campos", "error");
-    return;
-  }
+  const verificado = usuarioActual.emailVerified;
 
-  try {
-    const credencial = EmailAuthProvider.credential(user.email, actual);
-    await reauthenticateWithCredential(user, credencial);
-    await updatePassword(user, nueva);
+  visorSeguridad.innerHTML = `
+    <p><strong>Correo electrónico:</strong> ${usuarioActual.email}</p>
+    <p><strong>Estado de verificación:</strong> 
+      <span style="color:${verificado ? '#00ff88' : '#ffaa00'}">
+        ${verificado ? "Verificado" : "No verificado"}
+      </span>
+    </p>
+    <p style="color:#aaa;">Para cambiar tu contraseña o verificar tu cuenta, usa los botones a continuación.</p>
+  `;
+}
 
-    mostrarNotificacion("Contraseña actualizada", "Tu nueva contraseña fue guardada", "éxito");
-    inputActual.value = "";
-    inputNueva.value = "";
-  } catch (error) {
-    console.error("Error de seguridad:", error);
-    mostrarNotificacion("Error", error.message, "error");
-  }
-});
+// Enviar verificación por correo
+function verificarEmail() {
+  if (!usuarioActual) return;
 
-chk2FA?.addEventListener("change", () => {
-  if (chk2FA.checked) {
-    mostrarNotificacion("2FA activado", "Verificación adicional activada (modo demo)", "info");
-  } else {
-    mostrarNotificacion("2FA desactivado", "Verificación adicional desactivada", "info");
-  }
-});
+  sendEmailVerification(usuarioActual)
+    .then(() => {
+      mostrarNotificacion("Correo enviado", "Revisa tu bandeja para verificar tu cuenta", "success");
+    })
+    .catch((error) => {
+      mostrarNotificacion("Error", error.message, "error");
+      console.error(error);
+    });
+}
+
+// Enviar correo para cambio de contraseña
+function resetearPassword() {
+  if (!usuarioActual) return;
+
+  sendPasswordResetEmail(auth, usuarioActual.email)
+    .then(() => {
+      mostrarNotificacion("Correo enviado", "Revisa tu email para cambiar la contraseña", "info");
+    })
+    .catch((error) => {
+      mostrarNotificacion("Error", error.message, "error");
+      console.error(error);
+    });
+}
+
+// Inicializar seguridad
+function inicializarSeguridad() {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      usuarioActual = user;
+      mostrarEstadoSeguridad();
+
+      if (btnVerificacion) {
+        btnVerificacion.addEventListener("click", verificarEmail);
+      }
+
+      if (btnReset) {
+        btnReset.addEventListener("click", resetearPassword);
+      }
+    } else {
+      if (visorSeguridad) {
+        visorSeguridad.innerHTML = "<p style='color:#aaa;'>Inicia sesión para ver tu configuración de seguridad.</p>";
+      }
+    }
+  });
+}
+
+window.addEventListener("DOMContentLoaded", inicializarSeguridad);
