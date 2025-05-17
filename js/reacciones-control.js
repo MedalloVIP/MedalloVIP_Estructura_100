@@ -1,45 +1,87 @@
 // reacciones-control.js
 
-import { mostrarNotificacion } from "./notificaciones-control.js";
+import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { app } from "./firebase-config.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-// Reacciones disponibles
-const reacciones = [
-  { tipo: "aplauso", emoji: "👏", sonido: "notificacion" },
-  { tipo: "corazon", emoji: "❤️", sonido: "éxito" },
-  { tipo: "fuego", emoji: "🔥", sonido: "éxito" },
-  { tipo: "beso", emoji: "😘", sonido: "info" }
-];
+const db = getDatabase(app);
+const auth = getAuth(app);
 
-// Generar botones dinámicamente
-function crearBotonesReaccion() {
-  const contenedor = document.getElementById("zonaReacciones");
+const contenedorReacciones = document.getElementById("zonaReacciones");
+const visorReacciones = document.getElementById("visorReacciones");
+const reaccionesRef = ref(db, "reacciones");
 
-  if (!contenedor) {
-    console.error("No se encontró la zona de reacciones");
-    return;
-  }
+const listaEmojis = ["🔥", "❤️", "😍", "👏", "💋", "💎"];
 
-  reacciones.forEach(reaccion => {
+let usuarioActual = null;
+
+// Crear botones de reacción
+function cargarBotonesReaccion() {
+  if (!contenedorReacciones) return;
+
+  contenedorReacciones.innerHTML = "";
+  listaEmojis.forEach((emoji) => {
     const btn = document.createElement("button");
-    btn.textContent = reaccion.emoji;
-    btn.title = reaccion.tipo;
+    btn.textContent = emoji;
     btn.style = `
-      font-size: 22px;
-      margin: 6px;
-      padding: 8px;
+      font-size: 24px;
+      background: none;
       border: none;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.1);
       cursor: pointer;
-      transition: transform 0.2s ease;
+      margin: 0 6px;
     `;
-
-    btn.addEventListener("click", () => {
-      mostrarNotificacion("¡Reacción enviada!", `Enviaste ${reaccion.tipo}`, reaccion.sonido);
-    });
-
-    contenedor.appendChild(btn);
+    btn.onclick = () => enviarReaccion(emoji);
+    contenedorReacciones.appendChild(btn);
   });
 }
 
-window.addEventListener("DOMContentLoaded", crearBotonesReaccion);
+// Enviar reacción al backend (Firebase)
+function enviarReaccion(emoji) {
+  if (!usuarioActual) return;
+
+  push(reaccionesRef, {
+    emoji,
+    usuario: usuarioActual.email,
+    timestamp: Date.now()
+  });
+}
+
+// Mostrar reacciones en pantalla
+function activarReaccionesLive() {
+  if (!visorReacciones) return;
+
+  onChildAdded(reaccionesRef, (data) => {
+    const { emoji } = data.val();
+    const span = document.createElement("span");
+    span.textContent = emoji;
+    span.style = `
+      font-size: 30px;
+      animation: flotar 1.5s ease-out forwards;
+      position: absolute;
+      bottom: 20px;
+      left: ${Math.random() * 80 + 10}%;
+      z-index: 999;
+    `;
+
+    visorReacciones.appendChild(span);
+
+    setTimeout(() => {
+      visorReacciones.removeChild(span);
+    }, 1500);
+  });
+}
+
+// Inicializar módulo
+function inicializarReacciones() {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      usuarioActual = user;
+      cargarBotonesReaccion();
+      activarReaccionesLive();
+    } else {
+      if (contenedorReacciones) contenedorReacciones.innerHTML = "<p style='color:#aaa;'>Inicia sesión para reaccionar.</p>";
+    }
+  });
+}
+
+window.addEventListener("DOMContentLoaded", inicializarReacciones);
