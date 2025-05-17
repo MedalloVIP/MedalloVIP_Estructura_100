@@ -2,47 +2,64 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="4; url=index.html">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Error 404 - Página no encontrada</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Error 404 - MedalloVIP</title>
   <style>
     body {
       background-color: #000;
       color: white;
       font-family: 'Segoe UI', sans-serif;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
     }
 
     h1 {
-      font-size: 4em;
-      background: linear-gradient(90deg, #00ffff, #ff00ff);
-      -webkit-background-clip: text;
-      color: transparent;
+      font-size: 5em;
+      color: #ff00ff;
+      margin: 0;
     }
 
-    p {
-      font-size: 1.2em;
-      color: #ccc;
+    h2 {
+      color: #00ffff;
       margin-top: 10px;
     }
 
-    small {
-      margin-top: 20px;
-      color: #555;
+    p {
+      color: #ccc;
+      margin: 20px 0;
+      font-size: 1.2em;
+    }
+
+    button {
+      padding: 12px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: #00ffff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 12px #00ffff88;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #00cccc;
     }
   </style>
 </head>
 <body>
 
   <h1>404</h1>
-  <p>La página que buscas no existe.</p>
-  <p>Redirigiendo a la página principal...</p>
-  <small>© 2025 MedalloVIP. Todos los derechos reservados.</small>
+  <h2>Página no encontrada</h2>
+  <p>Lo sentimos, la página que buscas no existe o fue movida.</p>
+  <button onclick="location.href='dashboard.html'">Volver al Dashboard</button>
 
 </body>
 </html>
