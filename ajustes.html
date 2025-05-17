@@ -46,25 +46,14 @@
       font-weight: bold;
       border-radius: 8px;
       cursor: pointer;
-    }
-
-    #melizzaBurbuja {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 999;
-      box-shadow: 0 0 15px #ff00ff99;
+      box-shadow: 0 0 10px #00ffff55;
     }
 
     #notificacionToast {
       position: fixed;
       bottom: 20px;
       left: 20px;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0, 0, 0, 0.8);
       padding: 12px 18px;
       border-radius: 10px;
       color: #00ffff;
@@ -111,9 +100,6 @@
     <button onclick="location.href='verificacion.html'">Verificar mi cuenta</button>
   </div>
 
-  <!-- Asistente IA -->
-  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" title="¿Necesitas ayuda?" />
-
   <!-- Notificación -->
   <div id="notificacionToast"></div>
 
@@ -123,9 +109,6 @@
   <script type="module" src="./js/idioma-control.js"></script>
   <script type="module" src="./js/seguridad-control.js"></script>
   <script type="module" src="./js/verificacion-control.js"></script>
-  <script type="module" src="./js/traduccion-control.js"></script>
   <script type="module" src="./js/notificaciones-control.js"></script>
-  <script type="module" src="./js/melizza-control.js"></script>
-
 </body>
 </html>
