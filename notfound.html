@@ -3,74 +3,58 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Error - Página No Encontrada</title>
+  <title>Error 404 - MedalloVIP</title>
   <style>
     body {
       margin: 0;
-      background: radial-gradient(circle, #000000 0%, #111111 100%);
+      padding: 0;
+      background: radial-gradient(circle, #000000 0%, #0a0a0a 100%);
       color: white;
       font-family: 'Segoe UI', sans-serif;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
       flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
       text-align: center;
     }
 
     h1 {
       font-size: 4em;
-      background: linear-gradient(90deg, #ff00ff, #00ffff);
-      -webkit-background-clip: text;
-      color: transparent;
+      color: #ff00ff;
       margin-bottom: 10px;
       animation: aparecer 1.2s ease-out;
     }
 
     p {
-      color: #ccc;
       font-size: 1.2em;
+      color: #ccc;
       margin-bottom: 30px;
-      animation: aparecer 1.5s ease-out;
+      max-width: 600px;
+      animation: aparecer 1.4s ease-out;
     }
 
-    button {
+    a {
+      padding: 12px 28px;
       background: #00ffff;
       color: black;
-      border: none;
-      padding: 14px 28px;
-      border-radius: 12px;
+      text-decoration: none;
       font-weight: bold;
-      cursor: pointer;
-      animation: aparecer 1.8s ease-out;
+      border-radius: 30px;
+      animation: aparecer 1.6s ease-out;
     }
 
     @keyframes aparecer {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    #melizzaBurbuja {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      box-shadow: 0 0 12px #ff00ff99;
-    }
   </style>
 </head>
 <body>
 
-  <h1>404</h1>
-  <p>Lo sentimos, esta página no existe en MedalloVIP.</p>
-  <button onclick="window.location.href='index.html'">Volver al inicio</button>
-
-  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
-
-  <!-- Opcional: conexión IA -->
-  <script type="module" src="./js/melizza-control.js"></script>
+  <h1>Error 404</h1>
+  <p>La página que estás buscando no existe o ha sido movida. Te invitamos a regresar al ecosistema.</p>
+  <a href="index.html">Ir al Inicio</a>
 
 </body>
 </html>
