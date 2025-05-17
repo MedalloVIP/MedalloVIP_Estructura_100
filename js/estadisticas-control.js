@@ -1,41 +1,52 @@
 // estadisticas-control.js
 
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { app } from "./firebase-config.js";
 import { mostrarNotificacion } from "./notificaciones-control.js";
 
-// Datos simulados de ejemplo
-const estadisticas = {
-  transmisiones: 14,
-  tokensGanados: 11200,
-  seguidoresNuevos: 57,
-  referidosActivos: 6,
-  sesiones: 38,
-  minutosOnline: 984
+const auth = getAuth(app);
+const visorEstadisticas = document.getElementById("contenedorEstadisticas");
+
+// Datos simulados para prueba beta
+const datosSimulados = {
+  seguidores: 1284,
+  tokensGenerados: 54500,
+  transmisiones: 32,
+  fansVIP: 85,
+  rankingGlobal: 12
 };
 
-// Mostrar estadísticas en contenedores
+// Mostrar las estadísticas
 function mostrarEstadisticas() {
-  const elementos = {
-    transmisiones: document.getElementById("statTransmisiones"),
-    tokens: document.getElementById("statTokens"),
-    seguidores: document.getElementById("statSeguidores"),
-    referidos: document.getElementById("statReferidos"),
-    sesiones: document.getElementById("statSesiones"),
-    minutos: document.getElementById("statMinutos")
-  };
+  if (!visorEstadisticas) return;
 
-  if (!elementos.transmisiones) {
-    console.warn("No se encontró el contenedor de estadísticas");
+  visorEstadisticas.innerHTML = `
+    <div style="display:grid; gap:12px;">
+      <div class="estadistica">Seguidores: <strong style="color:#00ffff;">${datosSimulados.seguidores}</strong></div>
+      <div class="estadistica">Tokens generados: <strong style="color:#ff00ff;">${datosSimulados.tokensGenerados}</strong></div>
+      <div class="estadistica">Transmisiones realizadas: <strong>${datosSimulados.transmisiones}</strong></div>
+      <div class="estadistica">Fans VIP: <strong>${datosSimulados.fansVIP}</strong></div>
+      <div class="estadistica">Ranking global: <strong>#${datosSimulados.rankingGlobal}</strong></div>
+    </div>
+  `;
+
+  mostrarNotificacion("Estadísticas", "Datos cargados correctamente", "info");
+}
+
+// Inicializar estadísticas
+function inicializarEstadisticas() {
+  if (!visorEstadisticas) {
+    console.warn("No se encontró el contenedor de estadísticas.");
     return;
   }
 
-  elementos.transmisiones.textContent = estadisticas.transmisiones;
-  elementos.tokens.textContent = estadisticas.tokensGanados.toLocaleString() + " tokens";
-  elementos.seguidores.textContent = estadisticas.seguidoresNuevos;
-  elementos.referidos.textContent = estadisticas.referidosActivos;
-  elementos.sesiones.textContent = estadisticas.sesiones;
-  elementos.minutos.textContent = estadisticas.minutosOnline + " min";
-
-  mostrarNotificacion("Estadísticas cargadas", "Rendimiento actualizado correctamente", "info");
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      mostrarEstadisticas();
+    } else {
+      visorEstadisticas.innerHTML = "<p style='color:#aaa;'>Inicia sesión para ver tus estadísticas.</p>";
+    }
+  });
 }
 
-window.addEventListener("DOMContentLoaded", mostrarEstadisticas);
+window.addEventListener("DOMContentLoaded", inicializarEstadisticas);
