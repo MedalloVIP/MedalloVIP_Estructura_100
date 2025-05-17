@@ -1,56 +1,86 @@
 // metas-control.js
 
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { app } from "./firebase-config.js";
 import { mostrarNotificacion } from "./notificaciones-control.js";
 
-// Lista de metas (puedes conectar con Firebase más adelante)
-const metas = [
-  { nombre: "Meta 1: Gana $50", progreso: 50, meta: 50, premio: "200 tokens" },
-  { nombre: "Meta 2: Obtén 5 referidos", progreso: 5, meta: 5, premio: "Bonificación de $10" },
-  { nombre: "Meta 3: Transmite 10 horas", progreso: 9, meta: 10, premio: "Destacado en el ranking" }
+const auth = getAuth(app);
+const contenedorMetas = document.getElementById("listaMetas");
+
+let usuarioActual = null;
+
+// Metas simuladas para la beta
+const metasSimuladas = [
+  {
+    nombre: "Ganar 10,000 tokens",
+    progreso: 6700,
+    total: 10000
+  },
+  {
+    nombre: "Realizar 20 transmisiones",
+    progreso: 13,
+    total: 20
+  },
+  {
+    nombre: "Invitar 5 usuarios activos",
+    progreso: 3,
+    total: 5
+  }
 ];
 
-// Cargar metas y mostrar visualmente
-function cargarMetas() {
-  const contenedor = document.getElementById("contenedorMetas");
+// Mostrar metas y progreso
+function renderizarMetas() {
+  if (!contenedorMetas) return;
 
-  if (!contenedor) {
-    console.error("No se encontró el contenedor de metas");
+  contenedorMetas.innerHTML = "";
+
+  if (metasSimuladas.length === 0) {
+    contenedorMetas.innerHTML = "<p style='color:#aaa;'>No tienes metas activas actualmente.</p>";
     return;
   }
 
-  metas.forEach((meta) => {
-    const porcentaje = Math.floor((meta.progreso / meta.meta) * 100);
+  metasSimuladas.forEach(meta => {
+    const porcentaje = Math.min((meta.progreso / meta.total) * 100, 100).toFixed(1);
 
-    const bloque = document.createElement("div");
-    bloque.className = "meta-item";
-    bloque.style = `
-      background: rgba(255, 255, 255, 0.05);
-      padding: 16px;
-      margin-bottom: 16px;
-      border-radius: 12px;
-      border: 1px solid #00ffff;
+    const div = document.createElement("div");
+    div.className = "meta-item";
+    div.style = `
+      background: #111;
+      padding: 12px;
+      margin-bottom: 14px;
+      border-radius: 10px;
       color: white;
-      font-family: sans-serif;
     `;
 
-    bloque.innerHTML = `
-      <h3 style="color:#00ffff;">${meta.nombre}</h3>
-      <p>Premio: <strong>${meta.premio}</strong></p>
-      <div style="background: #333; border-radius: 10px; overflow: hidden; margin: 10px 0;">
-        <div style="width: ${porcentaje}%; background: linear-gradient(90deg, #00ffff, #ff00ff); height: 14px;"></div>
+    div.innerHTML = `
+      <strong style="color:#00ffff;">${meta.nombre}</strong><br>
+      <div style="background:#222; border-radius: 8px; overflow: hidden; margin-top:6px; height: 18px;">
+        <div style="width:${porcentaje}%; background:#00ffff; height:100%;"></div>
       </div>
-      <p>${meta.progreso} / ${meta.meta}</p>
+      <p style="font-size: 14px; margin-top: 4px;">${meta.progreso} / ${meta.total} (${porcentaje}%)</p>
     `;
 
-    contenedor.appendChild(bloque);
+    contenedorMetas.appendChild(div);
+  });
 
-    // Mostrar notificación si se alcanza la meta
-    if (meta.progreso >= meta.meta) {
-      setTimeout(() => {
-        mostrarNotificacion("¡Meta completada!", `${meta.premio} desbloqueado por ${meta.nombre}`, "éxito");
-      }, 500);
+  mostrarNotificacion("Metas cargadas", "Tu progreso ha sido actualizado", "info");
+}
+
+// Inicializar sistema
+function inicializarMetas() {
+  if (!contenedorMetas) {
+    console.warn("No se encontró el contenedor de metas.");
+    return;
+  }
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      usuarioActual = user;
+      renderizarMetas();
+    } else {
+      contenedorMetas.innerHTML = "<p style='color:#aaa;'>Inicia sesión para ver tus metas.</p>";
     }
   });
 }
 
-window.addEventListener("DOMContentLoaded", cargarMetas);
+window.addEventListener("DOMContentLoaded", inicializarMetas);
