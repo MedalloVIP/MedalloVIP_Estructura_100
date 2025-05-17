@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Recompensas - MedalloVIP</title>
   <style>
     body {
+      margin: 0;
       background-color: #000;
       color: white;
       font-family: 'Segoe UI', sans-serif;
@@ -13,65 +14,64 @@
     }
 
     h2 {
+      text-align: center;
       color: #00ffff;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
+    }
+
+    #listaRecompensas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
     }
 
     .recompensa {
-      background: rgba(255,255,255,0.05);
-      border-left: 4px solid #00ffff55;
-      padding: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border-left: 4px solid #00ffff;
+      padding: 20px;
       border-radius: 12px;
-      margin-bottom: 20px;
+      box-shadow: 0 0 10px #00ffff22;
     }
 
     .recompensa h3 {
-      margin: 0;
+      margin-top: 0;
       color: #00ffff;
     }
 
     .recompensa p {
-      margin: 6px 0;
+      font-size: 14px;
       color: #ccc;
     }
 
-    .recompensa button {
+    .estado {
       margin-top: 10px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
       font-weight: bold;
-      cursor: pointer;
+      color: #00ff88;
     }
 
-    .btn-reclamar {
-      background: #00ffff;
-      color: black;
+    .pendiente {
+      color: #ff5555;
     }
 
-    .btn-pendiente {
-      background: #555;
-      color: #ccc;
-      cursor: not-allowed;
+    @media (max-width: 500px) {
+      #listaRecompensas {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
 
-  <h2>Mis Recompensas</h2>
+  <h2>Recompensas</h2>
 
   <div id="listaRecompensas">
-    <!-- Recompensas dinámicas aquí -->
+    <!-- Recompensas cargadas desde JS -->
   </div>
-
-  <!-- Melizza -->
-  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
 
   <!-- Scripts -->
   <script type="module" src="./js/firebase-config.js"></script>
   <script type="module" src="./js/recompensas-control.js"></script>
   <script type="module" src="./js/notificaciones-control.js"></script>
-  <script type="module" src="./js/melizza-control.js"></script>
 
 </body>
 </html>
