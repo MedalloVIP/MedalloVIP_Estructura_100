@@ -1,40 +1,60 @@
-// ver-transmision-control.js
+// ver-trasmision-control.js
 
 import { connect } from "https://cdn.skypack.dev/livekit-client";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { app } from "./firebase-config.js";
 import { mostrarNotificacion } from "./notificaciones-control.js";
 
-const videoViewer = document.getElementById("videoViewer");
+const auth = getAuth(app);
 
-// Configura la conexión LiveKit
-const livekitURL = "wss://medallovip-zxlixdwt.livekit.cloud";
-const token = "TOKEN_GENERADO_ESPECTADOR"; // Este debe venir desde tu backend según la sala
+// Elementos del DOM
+const videoCliente = document.getElementById("videoCliente");
+const btnUnirse = document.getElementById("btnUnirseStream");
 
-// Conectar automáticamente al cargar
-window.addEventListener("DOMContentLoaded", async () => {
+const URL_SERVIDOR = "wss://medallovip-zxlixdwt.livekit.cloud";
+let tokenLivekit = null;
+let room = null;
+
+// Simulador de generación de token para el usuario
+function generarToken(nombreUsuario) {
+  return fetch(`https://tu-backend.com/api/token?nombre=${nombreUsuario}`)
+    .then(res => res.text());
+}
+
+// Unirse a la transmisión
+async function verTransmision() {
   try {
-    const room = await connect(livekitURL, token, {
-      audio: true,
-      video: true,
-    });
+    if (!tokenLivekit) {
+      tokenLivekit = await generarToken("cliente_" + usuario.email.split("@")[0]);
+    }
 
-    mostrarNotificacion("Conectado a la sala", "Disfruta el show en vivo", "info");
+    room = await connect(URL_SERVIDOR, tokenLivekit);
 
     room.on("trackSubscribed", (track, publication, participant) => {
       if (track.kind === "video") {
-        track.attach(videoViewer);
+        videoCliente.srcObject = new MediaStream([track.mediaStreamTrack]);
+        videoCliente.play();
+        mostrarNotificacion("Conectado", "Estás viendo la transmisión", "success");
       }
     });
-
-    room.on("participantConnected", participant => {
-      console.log(`${participant.identity} se conectó`);
-    });
-
-    room.on("participantDisconnected", participant => {
-      console.log(`${participant.identity} salió`);
-    });
-
   } catch (error) {
-    console.error("Error al conectarse como espectador:", error);
     mostrarNotificacion("Error", "No se pudo conectar al stream", "error");
+    console.error(error);
+  }
+}
+
+// Inicializar cliente
+let usuario = null;
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    usuario = user;
+    if (btnUnirse) {
+      btnUnirse.addEventListener("click", verTransmision);
+    } else {
+      verTransmision(); // Auto play si no hay botón
+    }
+  } else {
+    mostrarNotificacion("Inicia sesión", "Debes iniciar sesión para ver transmisiones", "warning");
   }
 });
