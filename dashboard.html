@@ -2,123 +2,80 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panel - MedalloVIP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - MedalloVIP</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      background: #000;
-      font-family: 'Segoe UI', sans-serif;
+      background-color: #000;
       color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-bottom: 100px;
-    }
-
-    header {
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
-      width: 100%;
-      padding: 20px;
-      text-align: center;
-      border-bottom: 1px solid #00ffff22;
-    }
-
-    header h1 {
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      font-size: 1.6em;
+      padding: 30px;
+    }
+
+    h2 {
       color: #00ffff;
+      margin-bottom: 30px;
+      text-align: center;
     }
 
-    .panel {
-      max-width: 900px;
-      width: 100%;
-      padding: 20px;
+    .grid-opciones {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
     }
 
-    .card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid #00ffff22;
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 12px #00ffff11;
-    }
-
-    .card h2 {
-      margin-top: 0;
-      color: #00ffff;
-    }
-
-    footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
+    .modulo {
       background: #111;
-      display: flex;
-      justify-content: space-around;
-      padding: 12px 0;
-      border-top: 1px solid #00ffff33;
+      border: 2px solid #00ffff44;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s;
     }
 
-    footer button {
-      background: none;
-      border: none;
+    .modulo:hover {
+      background: #111111;
+      border-color: #00ffff;
+      box-shadow: 0 0 10px #00ffff66;
+    }
+
+    .modulo a {
+      text-decoration: none;
       color: #00ffff;
       font-weight: bold;
-      cursor: pointer;
+      font-size: 16px;
     }
 
-    #melizzaBurbuja {
-      position: fixed;
-      bottom: 80px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      cursor: pointer;
-      box-shadow: 0 0 12px #ff00ff99;
+    @media (max-width: 500px) {
+      .grid-opciones {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Bienvenido a tu Panel</h1>
-  </header>
+  <h2>Centro de Control - MedalloVIP</h2>
 
-  <div class="panel">
-    <div class="card">
-      <h2>Saldo disponible</h2>
-      <p><strong id="saldoUsuario">8000 tokens</strong></p>
-    </div>
-
-    <div class="card">
-      <h2>Ranking actual</h2>
-      <p>Puesto #12 esta semana</p>
-    </div>
-
-    <div class="card">
-      <h2>Metas activas</h2>
-      <p>¡Estás a 1 referido de ganar 500 tokens!</p>
-    </div>
+  <div class="grid-opciones">
+    <div class="modulo"><a href="panel.html">Mi Panel</a></div>
+    <div class="modulo"><a href="perfil.html">Mi Perfil</a></div>
+    <div class="modulo"><a href="transmitir.html">Transmitir</a></div>
+    <div class="modulo"><a href="tokens.html">Mis Tokens</a></div>
+    <div class="modulo"><a href="ranking.html">Ranking</a></div>
+    <div class="modulo"><a href="premios.html">Premios</a></div>
+    <div class="modulo"><a href="clubfans.html">Club de Fans</a></div>
+    <div class="modulo"><a href="retiros.html">Retiros</a></div>
+    <div class="modulo"><a href="seguridad.html">Seguridad</a></div>
+    <div class="modulo"><a href="ajustes.html">Ajustes</a></div>
+    <div class="modulo"><a href="backup.html">Backup</a></div>
+    <div class="modulo"><a href="galeria.html">Galería</a></div>
+    <div class="modulo"><a href="metas.html">Metas</a></div>
+    <div class="modulo"><a href="eventos.html">Eventos</a></div>
+    <div class="modulo"><a href="soporte.html">Soporte</a></div>
   </div>
-
-  <footer>
-    <button onclick="location.href='tienda.html'">Tienda</button>
-    <button onclick="location.href='ranking.html'">Ranking</button>
-    <button onclick="location.href='perfil.html'">Perfil</button>
-    <button onclick="location.href='metas.html'">Metas</button>
-  </footer>
-
-  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
-
-  <script type="module" src="./js/firebase-config.js"></script>
-  <script type="module" src="./js/panel-control.js"></script>
-  <script type="module" src="./js/melizza-control.js"></script>
-  <script type="module" src="./js/notificaciones-control.js"></script>
 
 </body>
 </html>
