@@ -1,6 +1,13 @@
 // registro-control.js
-import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { app } from "./firebase-config.js";
+import { mostrarNotificacion } from "./notificaciones-control.js";
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -15,19 +22,18 @@ window.addEventListener("DOMContentLoaded", () => {
       const password = document.getElementById("password").value.trim();
 
       if (!email || !password) {
-        alert("Por favor completa todos los campos.");
+        mostrarNotificacion("Campos requeridos", "Debes completar todos los campos", "warning");
         return;
       }
 
       try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        localStorage.setItem("usuarioActivo", user.email);
-        alert("Registro exitoso. Bienvenido a MedalloVIP.");
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        localStorage.setItem("usuarioActivo", cred.user.email);
+        mostrarNotificacion("Registro exitoso", "Bienvenido a MedalloVIP", "success");
         window.location.href = "panel.html";
       } catch (error) {
-        alert("Error al registrarse: " + error.message);
-        console.error(error);
+        mostrarNotificacion("Error", error.message, "error");
+        console.error("Registro fallido:", error);
       }
     });
   }
@@ -38,11 +44,11 @@ window.addEventListener("DOMContentLoaded", () => {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
         localStorage.setItem("usuarioActivo", user.email);
-        alert("Registro con Google exitoso.");
+        mostrarNotificacion("Google conectado", "Registro con Google exitoso", "success");
         window.location.href = "panel.html";
       } catch (error) {
-        alert("Error con Google: " + error.message);
-        console.error(error);
+        mostrarNotificacion("Error con Google", error.message, "error");
+        console.error("Google sign-in error:", error);
       }
     });
   }
