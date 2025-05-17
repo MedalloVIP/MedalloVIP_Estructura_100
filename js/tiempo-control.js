@@ -1,32 +1,42 @@
 // tiempo-control.js
 
-function actualizarRelojes() {
-  const relojEcosistema = document.getElementById("relojEcosistema");
-  const relojUsuario = document.getElementById("relojUsuario");
-  const fechaActual = document.getElementById("fechaActual");
+const relojEcosistema = document.getElementById("relojEcosistema");
+const relojUsuario = document.getElementById("relojUsuario");
+const fechaActual = document.getElementById("fechaActual");
 
-  const ahora = new Date();
+let inicioSesion = new Date();
 
-  // Tiempo del ecosistema (UTC universal)
-  const tiempoUTC = ahora.toUTCString().split(" ")[4];
-  if (relojEcosistema) relojEcosistema.textContent = tiempoUTC;
-
-  // Tiempo local del usuario
-  const tiempoLocal = ahora.toLocaleTimeString("es-CO", { hour12: false });
-  if (relojUsuario) relojUsuario.textContent = tiempoLocal;
-
-  // Fecha actual formateada
-  const fecha = ahora.toLocaleDateString("es-CO", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-  });
-  if (fechaActual) fechaActual.textContent = fecha.charAt(0).toUpperCase() + fecha.slice(1);
+// Formatear hora en formato HH:MM:SS
+function formatearHora(date) {
+  return date.toLocaleTimeString("es-CO", { hour12: false });
 }
 
-// Actualizar cada segundo
-setInterval(actualizarRelojes, 1000);
+// Formatear fecha como DD/MM/YYYY
+function formatearFecha(date) {
+  return date.toLocaleDateString("es-CO");
+}
 
-// Ejecutar al iniciar
-window.addEventListener("DOMContentLoaded", actualizarRelojes);
+// Actualizar relojes en tiempo real
+function actualizarRelojes() {
+  const ahora = new Date();
+
+  if (relojEcosistema) {
+    relojEcosistema.textContent = `Ecosistema: ${formatearHora(ahora)}`;
+  }
+
+  if (relojUsuario) {
+    const tiempoActivo = new Date(ahora - inicioSesion);
+    relojUsuario.textContent = `Usuario: ${formatearHora(tiempoActivo)}`;
+  }
+
+  if (fechaActual) {
+    fechaActual.textContent = `Fecha: ${formatearFecha(ahora)}`;
+  }
+}
+
+function inicializarRelojes() {
+  actualizarRelojes();
+  setInterval(actualizarRelojes, 1000);
+}
+
+window.addEventListener("DOMContentLoaded", inicializarRelojes);
