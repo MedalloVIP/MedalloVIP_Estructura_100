@@ -1,10 +1,25 @@
 // velocidad-control.js
 
-export function iniciarMedicionVelocidad(elementoSalida) {
-  if (!elementoSalida || !navigator.connection) return;
+const selectorVelocidad = document.getElementById("selectorVelocidad");
+const video = document.querySelector("video"); // Asegúrate de tener un <video> en pantalla
 
-  setInterval(() => {
-    const velocidad = navigator.connection.downlink;
-    elementoSalida.textContent = `Velocidad: ${velocidad.toFixed(1)} Mbps`;
-  }, 3000);
-}// Medición de velocidad de conexión
+function aplicarVelocidadGuardada() {
+  const velocidadGuardada = localStorage.getItem("velocidadVideo") || "1.0";
+  if (selectorVelocidad) selectorVelocidad.value = velocidadGuardada;
+  if (video) video.playbackRate = parseFloat(velocidadGuardada);
+}
+
+function cambiarVelocidad() {
+  const nuevaVelocidad = selectorVelocidad?.value || "1.0";
+  if (video) video.playbackRate = parseFloat(nuevaVelocidad);
+  localStorage.setItem("velocidadVideo", nuevaVelocidad);
+}
+
+function inicializarControlVelocidad() {
+  aplicarVelocidadGuardada();
+  if (selectorVelocidad) {
+    selectorVelocidad.addEventListener("change", cambiarVelocidad);
+  }
+}
+
+window.addEventListener("DOMContentLoaded", inicializarControlVelocidad);
