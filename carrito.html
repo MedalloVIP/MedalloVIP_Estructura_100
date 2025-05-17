@@ -6,7 +6,7 @@
   <title>Carrito - MedalloVIP</title>
   <style>
     body {
-      background: #000;
+      background-color: #000;
       color: white;
       font-family: 'Segoe UI', sans-serif;
       padding: 30px;
@@ -18,67 +18,48 @@
     }
 
     .producto {
-      display: flex;
-      gap: 16px;
-      align-items: center;
       background: rgba(255,255,255,0.05);
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 14px;
-      border-left: 4px solid #00ffff44;
+      border-left: 4px solid #00ffff;
+      padding: 14px;
+      margin-bottom: 12px;
+      border-radius: 8px;
     }
 
-    .producto img {
-      width: 80px;
-      height: 80px;
-      border-radius: 10px;
-      object-fit: cover;
-    }
-
-    .producto-info {
-      flex: 1;
-    }
-
-    .producto-info h4 {
-      margin: 0;
-      color: #00ffff;
-    }
-
-    .producto-info p {
-      margin: 4px 0 0;
+    .producto span {
+      display: block;
       font-size: 14px;
       color: #ccc;
     }
 
-    .acciones {
-      display: flex;
-      justify-content: space-between;
+    #totalCarrito {
       margin-top: 30px;
+      font-size: 18px;
+      color: #00ff88;
     }
 
-    .acciones button {
+    button {
       padding: 12px 20px;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .vaciar {
-      background: #ff0055;
-      color: white;
-    }
-
-    .pagar {
       background: #00ffff;
       color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffff55;
+      margin-top: 10px;
     }
 
-    .total {
-      font-size: 1.2em;
-      margin-top: 20px;
-      text-align: right;
+    #notificacionToast {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(0,0,0,0.8);
+      padding: 12px 18px;
+      border-radius: 10px;
       color: #00ffff;
+      font-size: 14px;
+      display: none;
+      z-index: 10000;
     }
   </style>
 </head>
@@ -87,24 +68,21 @@
   <h2>Tu Carrito</h2>
 
   <div id="listaCarrito">
-    <!-- Productos agregados dinámicamente -->
+    <!-- Los productos agregados aparecerán aquí -->
   </div>
 
-  <div class="total">Total: <strong id="totalTokens">0</strong> tokens</div>
+  <p id="totalCarrito">Total: 0 Tokens</p>
 
-  <div class="acciones">
-    <button class="vaciar" id="btnVaciar">Vaciar Carrito</button>
-    <button class="pagar" id="btnPagar">Pagar con Tokens</button>
-  </div>
+  <!-- Botón externo de ejemplo -->
+  <button onclick="agregarAlCarrito('Accesorio VIP', 200)">Agregar Accesorio VIP (200 Tokens)</button>
 
-  <!-- Melizza -->
-  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
+  <!-- Notificación -->
+  <div id="notificacionToast"></div>
 
   <!-- Scripts -->
-  <script type="module" src="./js/carrito-control.js"></script>
   <script type="module" src="./js/firebase-config.js"></script>
+  <script type="module" src="./js/carrito-control.js"></script>
   <script type="module" src="./js/notificaciones-control.js"></script>
-  <script type="module" src="./js/melizza-control.js"></script>
 
 </body>
 </html>
