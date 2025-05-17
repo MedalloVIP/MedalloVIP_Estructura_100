@@ -6,105 +6,70 @@
   <title>Marketing - MedalloVIP</title>
   <style>
     body {
-      background: #000;
+      background-color: #000;
       color: white;
       font-family: 'Segoe UI', sans-serif;
       padding: 30px;
+      margin: 0;
     }
 
     h2 {
+      text-align: center;
       color: #00ffff;
-      margin-bottom: 20px;
-    }
-
-    .ref-link {
-      background: rgba(255,255,255,0.05);
-      padding: 12px;
-      border-radius: 10px;
-      border-left: 4px solid #00ffff;
-      margin-bottom: 20px;
-      word-break: break-all;
-    }
-
-    button {
-      background: #00ffff;
-      color: black;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
       margin-bottom: 30px;
     }
 
-    .stats {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .stats div {
-      flex: 1;
-      min-width: 160px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid #00ffff33;
-      padding: 14px;
+    .campaña {
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 4px solid #00ffff;
+      padding: 16px;
       border-radius: 10px;
-      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0 0 8px #00ffff33;
     }
 
-    .tools {
-      margin-top: 30px;
+    .campaña h3 {
+      margin: 0;
+      color: #00ffff;
     }
 
-    .tools img {
-      width: 100%;
-      max-width: 250px;
-      margin: 10px;
-      border-radius: 10px;
-      border: 2px solid #00ffff33;
+    .campaña p {
+      margin: 6px 0 0;
+      color: #ccc;
+    }
+
+    .campaña a {
+      display: inline-block;
+      margin-top: 10px;
+      color: #00ff88;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .campaña img {
+      margin-top: 10px;
+      max-width: 100%;
+      border-radius: 8px;
+      border: 1px solid #00ffff22;
+    }
+
+    #contenedorMarketing {
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <h2>Centro de Marketing</h2>
+  <h2>Zona de Marketing</h2>
 
-  <p>Comparte tu enlace único para ganar tokens:</p>
-  <div class="ref-link" id="linkReferido">https://medallovip.live/?ref=USUARIO</div>
-  <button id="copiarBtn">Copiar Enlace</button>
-
-  <div class="stats">
-    <div>
-      <h3>Referidos Activos</h3>
-      <p id="refActivos">0</p>
-    </div>
-    <div>
-      <h3>Tokens Ganados</h3>
-      <p id="tokensGanados">0</p>
-    </div>
-    <div>
-      <h3>Conversiones</h3>
-      <p id="conversiones">0</p>
-    </div>
+  <div id="contenedorMarketing">
+    <!-- Se cargan las campañas aquí -->
   </div>
-
-  <div class="tools">
-    <h3 style="color:#00ffff;">Herramientas Promocionales</h3>
-    <div>
-      <img src="./imagenes/banner1.png" alt="Banner Promocional" />
-      <img src="./imagenes/banner2.png" alt="Banner Promocional" />
-    </div>
-  </div>
-
-  <!-- Melizza -->
-  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
 
   <!-- Scripts -->
-  <script type="module" src="./js/marketing-control.js"></script>
   <script type="module" src="./js/firebase-config.js"></script>
+  <script type="module" src="./js/marketing-control.js"></script>
   <script type="module" src="./js/notificaciones-control.js"></script>
-  <script type="module" src="./js/melizza-control.js"></script>
 
 </body>
 </html>
