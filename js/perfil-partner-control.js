@@ -1,27 +1,73 @@
 // perfil-partner-control.js
 
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, updateProfile, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { app } from "./firebase-config.js";
 import { mostrarNotificacion } from "./notificaciones-control.js";
 
-const auth = getAuth(app);
+// Elementos del DOM
+const inputEmpresa = document.getElementById("empresaPartner");
+const inputSector = document.getElementById("sectorPartner");
+const inputPresentacion = document.getElementById("presentacionPartner");
+const btnGuardar = document.getElementById("btnGuardarPartner");
+const visorResumen = document.getElementById("resumenPartner");
 
-const nombrePartner = document.getElementById("nombrePartner");
-const correoPartner = document.getElementById("correoPartner");
-const totalReferidos = document.getElementById("referidosPartner");
-const ingresosGenerados = document.getElementById("ingresosPartner");
-const linkInvitacion = document.getElementById("linkInvitacion");
+let partnerActual = null;
 
-auth.onAuthStateChanged(user => {
-  if (user) {
-    if (nombrePartner) nombrePartner.textContent = user.displayName || "Socio afiliado";
-    if (correoPartner) correoPartner.textContent = user.email;
+// Cargar perfil existente
+function cargarPerfilPartner(user) {
+  const email = user.email;
+  const datos = JSON.parse(localStorage.getItem(`partner_${email}`)) || {
+    empresa: "",
+    sector: "",
+    presentacion: ""
+  };
 
-    // Datos simulados
-    if (totalReferidos) totalReferidos.textContent = "23 referidos activos";
-    if (ingresosGenerados) ingresosGenerados.textContent = "$124.50 USD en comisiones";
-    if (linkInvitacion) linkInvitacion.textContent = `https://medallovip.live/invitar/${user.uid}`;
+  inputEmpresa.value = datos.empresa;
+  inputSector.value = datos.sector;
+  inputPresentacion.value = datos.presentacion;
 
-    mostrarNotificacion("Perfil Partner", "Tu red de referidos está activa", "info");
+  if (visorResumen) {
+    visorResumen.innerHTML = `
+      <p><strong>Correo asociado:</strong> ${email}</p>
+      <p><strong>Empresa:</strong> ${datos.empresa || "No definida"}</p>
+      <p><strong>Sector:</strong> ${datos.sector || "No definido"}</p>
+    `;
   }
-});
+}
+
+// Guardar perfil del partner
+function guardarPerfilPartner() {
+  const empresa = inputEmpresa.value.trim();
+  const sector = inputSector.value.trim();
+  const presentacion = inputPresentacion.value.trim();
+
+  if (!empresa || !sector) {
+    mostrarNotificacion("Campos requeridos", "Empresa y sector no pueden estar vacíos", "warning");
+    return;
+  }
+
+  const datos = { empresa, sector, presentacion };
+  localStorage.setItem(`partner_${partnerActual.email}`, JSON.stringify(datos));
+  mostrarNotificacion("Perfil guardado", "Tu perfil de partner fue actualizado", "success");
+  cargarPerfilPartner(partnerActual);
+}
+
+// Inicializar módulo
+function inicializarPerfilPartner() {
+  if (!inputEmpresa || !inputSector || !inputPresentacion || !btnGuardar) {
+    console.warn("Faltan campos del perfil de partner.");
+    return;
+  }
+
+  onAuthStateChanged(getAuth(app), (user) => {
+    if (user) {
+      partnerActual = user;
+      cargarPerfilPartner(user);
+      btnGuardar.addEventListener("click", guardarPerfilPartner);
+    } else {
+      mostrarNotificacion("Sin sesión", "Inicia sesión como partner para acceder a tu perfil", "warning");
+    }
+  });
+}
+
+window.addEventListener("DOMContentLoaded", inicializarPerfilPartner);
