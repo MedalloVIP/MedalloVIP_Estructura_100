@@ -1,50 +1,73 @@
 // ranking-control.js
 
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { app } from "./firebase-config.js";
 import { mostrarNotificacion } from "./notificaciones-control.js";
 
-// Datos simulados de modelos destacados
-const modelos = [
-  { nombre: "Valentina", tokens: 9420, fans: 228 },
-  { nombre: "AlexaMoon", tokens: 8590, fans: 201 },
-  { nombre: "DomiXX", tokens: 7320, fans: 178 },
-  { nombre: "NovaChloe", tokens: 6690, fans: 160 },
-  { nombre: "JadeLuz", tokens: 5280, fans: 144 }
+const auth = getAuth(app);
+const visorRanking = document.getElementById("listaRanking");
+
+// Datos simulados para prueba beta
+const rankingSimulado = [
+  { nombre: "ValentinaVIP", puntos: 15890, tipo: "Modelo" },
+  { nombre: "Estudio Éxito", puntos: 12350, tipo: "Estudio" },
+  { nombre: "CamilaLatina", puntos: 11980, tipo: "Modelo" },
+  { nombre: "Partner Medellín", puntos: 8750, tipo: "Partner" },
+  { nombre: "SofiaHot", puntos: 8460, tipo: "Modelo" },
+  { nombre: "CarlosUsuario", puntos: 6540, tipo: "Usuario" }
 ];
 
-// Mostrar ranking
-function cargarRanking() {
-  const contenedor = document.getElementById("tablaRanking");
+// Renderizar ranking
+function renderizarRanking() {
+  if (!visorRanking) return;
 
-  if (!contenedor) {
-    console.error("No se encontró el contenedor del ranking");
+  visorRanking.innerHTML = "";
+
+  rankingSimulado.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "ranking-item";
+    div.style = `
+      background: #111;
+      padding: 14px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 4px solid ${item.tipo === "Modelo" ? "#ff00ff" : item.tipo === "Estudio" ? "#00ffff" : "#ffaa00"};
+    `;
+
+    div.innerHTML = `
+      <div>
+        <strong style="font-size: 16px;">#${index + 1} - ${item.nombre}</strong><br>
+        <small style="color:#aaa;">${item.tipo}</small>
+      </div>
+      <div style="font-size: 16px; color: #00ff88;">
+        ${item.puntos} pts
+      </div>
+    `;
+
+    visorRanking.appendChild(div);
+  });
+
+  mostrarNotificacion("Ranking actualizado", "Clasificación cargada con éxito", "info");
+}
+
+// Inicializar ranking
+function inicializarRanking() {
+  if (!visorRanking) {
+    console.warn("No se encontró el contenedor del ranking.");
     return;
   }
 
-  contenedor.innerHTML = "";
-
-  modelos.sort((a, b) => b.tokens - a.tokens);
-
-  modelos.forEach((modelo, index) => {
-    const fila = document.createElement("div");
-    fila.className = "fila-ranking";
-    fila.style = `
-      padding: 12px;
-      margin-bottom: 6px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid #00ffff;
-      border-radius: 8px;
-    `;
-
-    fila.innerHTML = `
-      <strong style="color:#ff00ff;">#${index + 1}</strong> 
-      <span style="margin-left: 12px;">${modelo.nombre}</span>
-      <span style="float:right; color:#00ffff;">${modelo.tokens} tokens</span>
-    `;
-
-    contenedor.appendChild(fila);
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      renderizarRanking();
+    } else {
+      visorRanking.innerHTML = "<p style='color:#aaa;'>Inicia sesión para ver el ranking.</p>";
+    }
   });
-
-  mostrarNotificacion("Ranking actualizado", "Top 5 modelos más activas", "info");
 }
 
-window.addEventListener("DOMContentLoaded", cargarRanking);
+window.addEventListener("DOMContentLoaded", inicializarRanking);
