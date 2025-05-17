@@ -2,62 +2,61 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Historial - MedalloVIP</title>
   <style>
     body {
-      background: #000;
+      background-color: #000;
       color: white;
       font-family: 'Segoe UI', sans-serif;
       padding: 30px;
+      margin: 0;
     }
+
     h2 {
+      text-align: center;
+      color: #00ffff;
+      margin-bottom: 30px;
+    }
+
+    .compra {
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 4px solid #00ffff;
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 8px #00ffff22;
+    }
+
+    .compra h3 {
+      margin: 0;
+      font-size: 16px;
       color: #00ffff;
     }
-    .registro {
-      background: rgba(255,255,255,0.05);
-      padding: 12px;
-      border-left: 4px solid #00ffff;
-      margin-bottom: 14px;
-      border-radius: 6px;
+
+    .compra p {
+      margin: 4px 0;
+      color: #ccc;
+      font-size: 14px;
     }
-    .registro small {
-      color: #aaa;
+
+    #historialCompras {
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <h2>Historial de compras</h2>
-  <div id="zonaHistorialCompras"></div>
+  <h2>Historial de Compras</h2>
 
-  <h2 style="margin-top: 40px;">Movimientos de tokens</h2>
-  <div id="zonaMovimientosTokens"></div>
-
-  <!-- Melizza -->
-  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
-
-  <!-- Notificación -->
-  <div id="notificacionToast" style="
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    background: rgba(0,0,0,0.8);
-    padding: 12px 18px;
-    border-radius: 10px;
-    color: #00ffff;
-    font-size: 14px;
-    display: none;
-    z-index: 10000;
-  "></div>
+  <div id="historialCompras">
+    <!-- Las compras se cargarán aquí dinámicamente -->
+  </div>
 
   <!-- Scripts -->
   <script type="module" src="./js/firebase-config.js"></script>
   <script type="module" src="./js/historial-compras-control.js"></script>
-  <script type="module" src="./js/movimientos-control.js"></script>
   <script type="module" src="./js/notificaciones-control.js"></script>
-  <script type="module" src="./js/traduccion-control.js"></script>
-  <script type="module" src="./js/melizza-control.js"></script>
 
 </body>
 </html>
