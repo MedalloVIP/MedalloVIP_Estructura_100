@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Soporte - MedalloVIP</title>
   <style>
     body {
@@ -11,69 +11,87 @@
       font-family: 'Segoe UI', sans-serif;
       padding: 30px;
     }
+
     h2 {
       color: #00ffff;
+      text-align: center;
+      margin-bottom: 30px;
     }
-    select, textarea, button {
+
+    label {
+      display: block;
+      margin-top: 16px;
+    }
+
+    select, textarea, input {
       width: 100%;
-      margin-top: 10px;
       padding: 12px;
-      border-radius: 8px;
+      margin-top: 6px;
       border: none;
+      border-radius: 10px;
       background: #111;
       color: white;
     }
+
     button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 14px;
       background: #00ffff;
       color: black;
       font-weight: bold;
+      border: none;
+      border-radius: 10px;
       cursor: pointer;
+    }
+
+    #historialSoporte {
+      margin-top: 40px;
+      border-top: 1px solid #00ffff33;
+      padding-top: 20px;
+    }
+
+    .ticket {
+      background: rgba(255,255,255,0.04);
+      padding: 16px;
+      margin-bottom: 12px;
+      border-left: 4px solid #00ffff;
+      border-radius: 10px;
+    }
+
+    .ticket small {
+      color: #999;
+      display: block;
+      margin-top: 6px;
     }
   </style>
 </head>
 <body>
 
   <h2>Centro de Soporte</h2>
-  <p>¿Tienes algún problema o deseas reportar algo? Llena el siguiente formulario:</p>
 
-  <label for="motivoReporte">Motivo del reporte:</label>
-  <select id="motivoReporte">
+  <label for="tipoUsuarioSoporte">Tipo de usuario</label>
+  <select id="tipoUsuarioSoporte">
     <option value="">Selecciona una opción</option>
-    <option value="tecnico">Error técnico</option>
-    <option value="perfil">Perfil inapropiado</option>
-    <option value="contenido">Contenido ofensivo</option>
-    <option value="fraude">Sospecha de fraude</option>
-    <option value="otro">Otro motivo</option>
+    <option value="Usuario">Usuario</option>
+    <option value="Modelo">Modelo</option>
+    <option value="Estudio">Estudio</option>
+    <option value="Partner">Partner</option>
   </select>
 
-  <label for="descripcionReporte">Describe el problema o situación:</label>
-  <textarea id="descripcionReporte" rows="5" placeholder="Cuéntanos qué sucede..."></textarea>
+  <label for="mensajeSoporte">Describe tu problema</label>
+  <textarea id="mensajeSoporte" rows="4" placeholder="Ej: Tengo un problema con mis tokens..."></textarea>
 
-  <button id="btnEnviarReporte">Enviar reporte</button>
+  <button id="btnEnviarSoporte">Enviar solicitud</button>
 
-  <!-- Melizza -->
-  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
-
-  <!-- Notificación -->
-  <div id="notificacionToast" style="
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    background: rgba(0,0,0,0.8);
-    padding: 12px 18px;
-    border-radius: 10px;
-    color: #00ffff;
-    font-size: 14px;
-    display: none;
-    z-index: 10000;
-  "></div>
+  <div id="historialSoporte">
+    <!-- Los tickets anteriores aparecerán aquí -->
+  </div>
 
   <!-- Scripts -->
   <script type="module" src="./js/firebase-config.js"></script>
-  <script type="module" src="./js/reportes-control.js"></script>
+  <script type="module" src="./js/soporte-control.js"></script>
   <script type="module" src="./js/notificaciones-control.js"></script>
-  <script type="module" src="./js/traduccion-control.js"></script>
-  <script type="module" src="./js/melizza-control.js"></script>
 
 </body>
 </html>
