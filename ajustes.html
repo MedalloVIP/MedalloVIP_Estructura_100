@@ -11,18 +11,22 @@
       font-family: 'Segoe UI', sans-serif;
       padding: 30px;
     }
-    h2 {
+
+    h2, h3 {
       color: #00ffff;
     }
+
     .seccion-ajuste {
       margin-bottom: 30px;
       border-bottom: 1px solid #222;
       padding-bottom: 20px;
     }
+
     label {
       display: block;
       margin-top: 10px;
     }
+
     input, select {
       width: 100%;
       padding: 10px;
@@ -32,6 +36,7 @@
       background: #111;
       color: white;
     }
+
     button {
       margin-top: 14px;
       padding: 12px;
@@ -42,12 +47,38 @@
       border-radius: 8px;
       cursor: pointer;
     }
+
+    #melizzaBurbuja {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: 0 0 15px #ff00ff99;
+    }
+
+    #notificacionToast {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(0,0,0,0.8);
+      padding: 12px 18px;
+      border-radius: 10px;
+      color: #00ffff;
+      font-size: 14px;
+      display: none;
+      z-index: 10000;
+    }
   </style>
 </head>
 <body>
 
-  <h2>Ajustes del sistema</h2>
+  <h2>Ajustes del Sistema</h2>
 
+  <!-- Idioma -->
   <div class="seccion-ajuste">
     <h3>Idioma</h3>
     <label for="selectIdioma">Selecciona tu idioma:</label>
@@ -61,6 +92,7 @@
     <button id="btnCambiarIdioma">Aplicar idioma</button>
   </div>
 
+  <!-- Seguridad -->
   <div class="seccion-ajuste">
     <h3>Seguridad</h3>
     <label for="passActual">Contraseña actual</label>
@@ -72,28 +104,18 @@
     <label><input type="checkbox" id="activar2FA"> Activar verificación en 2 pasos (simulado)</label>
   </div>
 
+  <!-- Verificación -->
   <div class="seccion-ajuste">
     <h3>Verificación</h3>
     <p>Puedes verificar tu cuenta para acceder a funciones avanzadas.</p>
     <button onclick="location.href='verificacion.html'">Verificar mi cuenta</button>
   </div>
 
-  <!-- Melizza -->
-  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
+  <!-- Asistente IA -->
+  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" title="¿Necesitas ayuda?" />
 
   <!-- Notificación -->
-  <div id="notificacionToast" style="
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    background: rgba(0,0,0,0.8);
-    padding: 12px 18px;
-    border-radius: 10px;
-    color: #00ffff;
-    font-size: 14px;
-    display: none;
-    z-index: 10000;
-  "></div>
+  <div id="notificacionToast"></div>
 
   <!-- Scripts -->
   <script type="module" src="./js/firebase-config.js"></script>
@@ -102,8 +124,8 @@
   <script type="module" src="./js/seguridad-control.js"></script>
   <script type="module" src="./js/verificacion-control.js"></script>
   <script type="module" src="./js/traduccion-control.js"></script>
-  <script type="module" src="./js/melizza-control.js"></script>
   <script type="module" src="./js/notificaciones-control.js"></script>
+  <script type="module" src="./js/melizza-control.js"></script>
 
 </body>
 </html>
