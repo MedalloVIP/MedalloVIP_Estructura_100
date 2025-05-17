@@ -1,59 +1,87 @@
 // favoritos-control.js
 
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { app } from "./firebase-config.js";
 import { mostrarNotificacion } from "./notificaciones-control.js";
 
-// Leer favoritos guardados
-function obtenerFavoritos() {
-  const data = localStorage.getItem("favoritosModelos");
-  return data ? JSON.parse(data) : [];
+const auth = getAuth(app);
+const listaFavoritos = document.getElementById("listaFavoritos");
+
+let usuarioActual = null;
+let favoritos = [];
+
+// Cargar favoritos desde localStorage
+function cargarFavoritos(email) {
+  const data = localStorage.getItem(`favoritos_${email}`);
+  favoritos = data ? JSON.parse(data) : [];
+  renderizarFavoritos();
 }
 
 // Guardar favoritos
-function guardarFavoritos(lista) {
-  localStorage.setItem("favoritosModelos", JSON.stringify(lista));
+function guardarFavoritos(email) {
+  localStorage.setItem(`favoritos_${email}`, JSON.stringify(favoritos));
+  renderizarFavoritos();
 }
 
-// Marcar o desmarcar modelo
-function toggleFavorito(nombreModelo) {
-  const favoritos = obtenerFavoritos();
-  const index = favoritos.indexOf(nombreModelo);
+// Mostrar favoritos
+function renderizarFavoritos() {
+  if (!listaFavoritos) return;
 
-  if (index >= 0) {
-    favoritos.splice(index, 1);
-    mostrarNotificacion("Eliminado", `${nombreModelo} fue removida de tus favoritas`, "info");
-  } else {
-    favoritos.push(nombreModelo);
-    mostrarNotificacion("Favorito añadido", `${nombreModelo} fue añadida a tus favoritas`, "éxito");
+  listaFavoritos.innerHTML = "";
+
+  if (favoritos.length === 0) {
+    listaFavoritos.innerHTML = "<p style='color:#aaa;'>No tienes modelos favoritos aún.</p>";
+    return;
   }
 
-  guardarFavoritos(favoritos);
-  mostrarFavoritos();
-}
+  favoritos.forEach((nombre, index) => {
+    const div = document.createElement("div");
+    div.className = "favorito";
+    div.style = "margin-bottom: 8px; color: white; background: #111; padding: 10px; border-radius: 8px;";
 
-// Mostrar favoritos actuales en pantalla
-function mostrarFavoritos() {
-  const contenedor = document.getElementById("listaFavoritos");
-  const favoritos = obtenerFavoritos();
-
-  if (!contenedor) return;
-
-  contenedor.innerHTML = "";
-
-  favoritos.forEach(nombre => {
-    const item = document.createElement("div");
-    item.style = `
-      background: rgba(255,255,255,0.05);
-      margin-bottom: 8px;
-      padding: 10px;
-      border-radius: 8px;
-      color: #00ffff;
+    div.innerHTML = `
+      <strong style="color:#00ffff;">${nombre}</strong>
+      <button onclick="eliminarFavorito(${index})" style="margin-left: 12px; background:#ff4444; color:white; border:none; border-radius:6px; padding:4px 8px;">Quitar</button>
     `;
-    item.textContent = nombre;
-    contenedor.appendChild(item);
+
+    listaFavoritos.appendChild(div);
   });
 }
 
-window.addEventListener("DOMContentLoaded", mostrarFavoritos);
+// Agregar modelo a favoritos
+function agregarFavorito(nombre) {
+  if (!usuarioActual || favoritos.includes(nombre)) return;
 
-// Exportar para usar el toggle desde botones externos
-export { toggleFavorito, mostrarFavoritos };
+  favoritos.push(nombre);
+  guardarFavoritos(usuarioActual.email);
+  mostrarNotificacion("Favorito agregado", `${nombre} se agregó a tu lista`, "success");
+}
+
+// Quitar modelo de favoritos
+window.eliminarFavorito = function(index) {
+  const eliminado = favoritos.splice(index, 1)[0];
+  guardarFavoritos(usuarioActual.email);
+  mostrarNotificacion("Favorito eliminado", `${eliminado} fue retirado de tus favoritos`, "warning");
+}
+
+// Inicializar
+function inicializarFavoritos() {
+  if (!listaFavoritos) {
+    console.warn("No se encontró el contenedor de favoritos.");
+    return;
+  }
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      usuarioActual = user;
+      cargarFavoritos(user.email);
+    } else {
+      listaFavoritos.innerHTML = "<p style='color:#aaa;'>Inicia sesión para ver tus favoritos.</p>";
+    }
+  });
+}
+
+window.addEventListener("DOMContentLoaded", inicializarFavoritos);
+
+// Exponer para botones externos
+window.agregarFavorito = agregarFavorito;
