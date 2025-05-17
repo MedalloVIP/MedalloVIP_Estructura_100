@@ -1,36 +1,86 @@
 // inventario-control.js
 
-const inventario = document.getElementById("inventario");
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { app } from "./firebase-config.js";
+import { mostrarNotificacion } from "./notificaciones-control.js";
 
-const items = [
-  { nombre: "Lencería Rosa", img: "https://cdn.medallovip.live/lenceria1.png", precio: 150 },
-  { nombre: "Juguete Exclusivo", img: "https://cdn.medallovip.live/juguete1.png", precio: 300 },
-  { nombre: "Foto Autografiada", img: "https://cdn.medallovip.live/foto1.png", precio: 500 }
+const auth = getAuth(app);
+const contenedorInventario = document.getElementById("listaInventario");
+
+let usuarioActual = null;
+
+// Inventario simulado
+const inventarioSimulado = [
+  { nombre: "Accesorio de Lencería", tipo: "ropa", cantidad: 2 },
+  { nombre: "Tótem VIP", tipo: "recompensa", cantidad: 1 },
+  { nombre: "Cristal de Energía", tipo: "consumible", cantidad: 5 }
 ];
 
-function mostrarInventario() {
-  if (!inventario) return;
-  items.forEach(item => {
-    const card = document.createElement("div");
-    card.style.background = "#111";
-    card.style.border = "2px solid #00ffff";
-    card.style.borderRadius = "10px";
-    card.style.margin = "10px";
-    card.style.padding = "10px";
-    card.style.width = "200px";
-    card.style.textAlign = "center";
-    card.style.color = "#fff";
-    card.style.boxShadow = "0 0 10px #00ffff88";
+// Renderizar inventario
+function renderizarInventario() {
+  if (!contenedorInventario) return;
 
-    card.innerHTML = `
-      <img src="${item.img}" alt="${item.nombre}" style="width:100%; border-radius:8px;"/>
-      <h4 style="margin:10px 0;">${item.nombre}</h4>
-      <p style="color:#ff00ff;">${item.precio} Tokens</p>
-      <button style="background:#00ffff; color:black; font-weight:bold; padding:8px 16px; border:none; border-radius:6px; cursor:pointer;">Comprar</button>
+  contenedorInventario.innerHTML = "";
+
+  if (inventarioSimulado.length === 0) {
+    contenedorInventario.innerHTML = "<p style='color:#aaa;'>Tu inventario está vacío.</p>";
+    return;
+  }
+
+  inventarioSimulado.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "item-inventario";
+    div.style = `
+      background: #111;
+      margin-bottom: 12px;
+      padding: 12px;
+      border-left: 4px solid #00ffff;
+      border-radius: 10px;
+      color: white;
     `;
 
-    inventario.appendChild(card);
+    div.innerHTML = `
+      <strong>${item.nombre}</strong><br>
+      Tipo: <span style="color:#ccc;">${item.tipo}</span><br>
+      Cantidad: <span style="color:#00ffff;">${item.cantidad}</span><br>
+      <button onclick="usarItem(${index})" style="margin-top:6px; background:#00ff88; color:black; border:none; border-radius:6px; padding:6px 12px; cursor:pointer;">Usar</button>
+    `;
+
+    contenedorInventario.appendChild(div);
   });
 }
 
-mostrarInventario();
+// Usar un ítem (simulado)
+window.usarItem = function(index) {
+  const item = inventarioSimulado[index];
+  if (item.cantidad > 0) {
+    item.cantidad -= 1;
+    mostrarNotificacion("Ítem usado", `${item.nombre} ha sido utilizado`, "info");
+    renderizarInventario();
+  }
+
+  if (item.cantidad === 0) {
+    inventarioSimulado.splice(index, 1);
+    mostrarNotificacion("Agotado", `${item.nombre} fue removido del inventario`, "warning");
+    renderizarInventario();
+  }
+}
+
+// Inicializar sistema
+function inicializarInventario() {
+  if (!contenedorInventario) {
+    console.warn("No se encontró el contenedor de inventario.");
+    return;
+  }
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      usuarioActual = user;
+      renderizarInventario();
+    } else {
+      contenedorInventario.innerHTML = "<p style='color:#aaa;'>Inicia sesión para ver tu inventario.</p>";
+    }
+  });
+}
+
+window.addEventListener("DOMContentLoaded", inicializarInventario);
