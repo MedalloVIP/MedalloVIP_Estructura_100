@@ -1,31 +1,89 @@
 // marketing-control.js
 
-const banner = document.getElementById("bannerPromo");
-const codigo = document.getElementById("codigoReferido");
-const link = document.getElementById("linkCompartir");
-const btnCopiar = document.getElementById("copiarBtn");
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { app } from "./firebase-config.js";
+import { mostrarNotificacion } from "./notificaciones-control.js";
 
-// Datos simulados (en el sistema real vendrán del perfil del modelo)
-const usuario = "ModelVIP001";
-const baseURL = "https://medallovip.live/modelo/";
-const codigoGenerado = `${usuario}-ref2025`;
+const auth = getAuth(app);
+const contenedorPromo = document.getElementById("contenedorMarketing");
 
-if (banner) {
-  banner.innerHTML = `
-    <img src="https://cdn.medallovip.live/banners/banner-modelo.png" alt="Promo" style="width:100%; border-radius: 10px;"/>
-    <p style="margin-top: 10px;">Tu código de referido:</p>
-    <input type="text" id="codigoInput" value="${codigoGenerado}" readonly style="width:100%; padding:8px; border:none; border-radius:6px;"/>
-    <button id="copiarBtn" style="margin-top:10px; background:#00ffff; color:black; padding:10px; border:none; border-radius:6px; font-weight:bold;">Copiar código</button>
-    <p style="margin-top:10px;">Tu enlace para compartir:</p>
-    <input type="text" id="linkCompartir" value="${baseURL + usuario}" readonly style="width:100%; padding:8px; border:none; border-radius:6px;"/>
-  `;
+let usuarioActual = null;
+
+// Promociones simuladas para la beta
+const promocionesSimuladas = [
+  {
+    id: "promo1",
+    titulo: "Duplica tus Tokens",
+    descripcion: "Recarga hoy y obtén el doble de tokens en tu primera compra",
+    activa: true
+  },
+  {
+    id: "promo2",
+    titulo: "Premio Semanal VIP",
+    descripcion: "Los modelos top recibirán bonificaciones en efectivo cada viernes",
+    activa: true
+  }
+];
+
+// Renderizar promociones activas
+function renderizarPromociones() {
+  if (!contenedorPromo) return;
+
+  contenedorPromo.innerHTML = "";
+
+  const vistas = JSON.parse(localStorage.getItem(`promo_vistas_${usuarioActual.email}`)) || [];
+
+  promocionesSimuladas.forEach(promo => {
+    if (promo.activa && !vistas.includes(promo.id)) {
+      const div = document.createElement("div");
+      div.className = "promo-banner";
+      div.style = `
+        background: linear-gradient(135deg, #00ffff33, #ff00ff33);
+        padding: 16px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        color: white;
+        border: 1px solid #00ffff;
+      `;
+
+      div.innerHTML = `
+        <h3>${promo.titulo}</h3>
+        <p>${promo.descripcion}</p>
+        <button style="margin-top: 8px; background: #00ffff; color: black; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer;"
+          onclick="ocultarPromocion('${promo.id}')">Cerrar</button>
+      `;
+
+      contenedorPromo.appendChild(div);
+    }
+  });
+
+  mostrarNotificacion("Promociones activas", "Campañas cargadas correctamente", "info");
 }
 
-if (btnCopiar) {
-  btnCopiar.onclick = () => {
-    const input = document.getElementById("codigoInput");
-    input.select();
-    document.execCommand("copy");
-    alert("¡Código copiado!");
-  };
+// Ocultar promoción marcada como vista
+window.ocultarPromocion = function(id) {
+  const key = `promo_vistas_${usuarioActual.email}`;
+  const vistas = JSON.parse(localStorage.getItem(key)) || [];
+  vistas.push(id);
+  localStorage.setItem(key, JSON.stringify(vistas));
+  renderizarPromociones();
 }
+
+// Inicializar marketing
+function inicializarMarketing() {
+  if (!contenedorPromo) {
+    console.warn("No se encontró el contenedor de promociones.");
+    return;
+  }
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      usuarioActual = user;
+      renderizarPromociones();
+    } else {
+      contenedorPromo.innerHTML = "<p style='color:#aaa;'>Inicia sesión para ver campañas activas.</p>";
+    }
+  });
+}
+
+window.addEventListener("DOMContentLoaded", inicializarMarketing);
