@@ -1,69 +1,73 @@
 // perfil-control.js
 
-import { getAuth, updateProfile, updateEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, updateProfile, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { app } from "./firebase-config.js";
 import { mostrarNotificacion } from "./notificaciones-control.js";
 
-// Simulación del rol del usuario (luego se extraerá desde Firebase o BD real)
-let tipoCuenta = localStorage.getItem("rol") || "usuario"; // modelo, usuario, estudio, partner
-
 const auth = getAuth(app);
-const nombreInput = document.getElementById("inputNombre");
-const correoInput = document.getElementById("inputCorreo");
-const avatarImg = document.getElementById("avatarPerfil");
-const btnGuardar = document.getElementById("btnGuardarPerfil");
-const seccionPrivilegios = document.getElementById("seccionPrivilegios");
 
-// Mostrar info del usuario
-auth.onAuthStateChanged(user => {
-  if (user) {
-    if (nombreInput) nombreInput.value = user.displayName || "";
-    if (correoInput) correoInput.value = user.email || "";
-    if (avatarImg && user.photoURL) avatarImg.src = user.photoURL;
+// Elementos del DOM
+const nombreInput = document.getElementById("perfilNombre");
+const presentacionInput = document.getElementById("perfilPresentacion");
+const guardarBtn = document.getElementById("btnGuardarPerfil");
+const visorInfo = document.getElementById("infoPerfil");
 
-    // Mostrar privilegios según rol
-    if (seccionPrivilegios) {
-      switch (tipoCuenta) {
-        case "modelo":
-          seccionPrivilegios.innerHTML = "Acceso total a transmisiones, ganancias y ranking.";
-          break;
-        case "usuario":
-          seccionPrivilegios.innerHTML = "Puedes ver transmisiones y enviar tokens.";
-          break;
-        case "estudio":
-          seccionPrivilegios.innerHTML = "Gestionas modelos, visualizas estadísticas.";
-          break;
-        case "partner":
-          seccionPrivilegios.innerHTML = "Revisas referidos y desempeño de la red.";
-          break;
-        default:
-          seccionPrivilegios.innerHTML = "Sin rol definido.";
-      }
-    }
+let usuarioActual = null;
+
+// Mostrar los datos del usuario en pantalla
+function cargarPerfil(user) {
+  const nombre = user.displayName || "";
+  const email = user.email;
+
+  if (visorInfo) {
+    visorInfo.innerHTML = `
+      <p><strong>Correo:</strong> ${email}</p>
+    `;
   }
-});
 
-// Guardar cambios básicos
-btnGuardar?.addEventListener("click", async () => {
-  const user = auth.currentUser;
-  const nuevoNombre = nombreInput?.value.trim();
-  const nuevoCorreo = correoInput?.value.trim();
+  if (nombreInput) nombreInput.value = nombre;
+  if (presentacionInput) presentacionInput.value = localStorage.getItem(`presentacion_${email}`) || "";
+}
 
-  if (!nuevoNombre || !nuevoCorreo) {
-    mostrarNotificacion("Campos incompletos", "Todos los campos son obligatorios", "error");
+// Guardar cambios del perfil
+function guardarPerfil() {
+  const nuevoNombre = nombreInput.value.trim();
+  const nuevaPresentacion = presentacionInput.value.trim();
+
+  if (!nuevoNombre) {
+    mostrarNotificacion("Error", "El nombre no puede estar vacío", "warning");
     return;
   }
 
-  try {
-    if (nuevoCorreo !== user.email) {
-      await updateEmail(user, nuevoCorreo);
-    }
+  updateProfile(usuarioActual, {
+    displayName: nuevoNombre
+  })
+    .then(() => {
+      localStorage.setItem(`presentacion_${usuarioActual.email}`, nuevaPresentacion);
+      mostrarNotificacion("Perfil actualizado", "Tus datos se han guardado", "success");
+    })
+    .catch((error) => {
+      console.error(error);
+      mostrarNotificacion("Error", "No se pudo actualizar el perfil", "error");
+    });
+}
 
-    await updateProfile(user, { displayName: nuevoNombre });
-
-    mostrarNotificacion("Perfil actualizado", "Tus datos fueron guardados", "éxito");
-  } catch (error) {
-    console.error("Error al actualizar perfil:", error);
-    mostrarNotificacion("Error", error.message, "error");
+// Inicializar el perfil
+function inicializarPerfil() {
+  if (!nombreInput || !presentacionInput || !guardarBtn) {
+    console.warn("Faltan elementos del perfil.");
+    return;
   }
-});
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      usuarioActual = user;
+      cargarPerfil(user);
+      guardarBtn.addEventListener("click", guardarPerfil);
+    } else {
+      mostrarNotificacion("Sin sesión", "Inicia sesión para ver tu perfil", "warning");
+    }
+  });
+}
+
+window.addEventListener("DOMContentLoaded", inicializarPerfil);
