@@ -1,27 +1,26 @@
-// moderación-control.js
+// moderacion-control.js
 
-import { mostrarNotificacion } from "./notificaciones-control.js";
-
-// Lista de palabras prohibidas (puedes ampliar esto luego)
+// Lista de palabras bloqueadas (modo beta)
 const palabrasProhibidas = [
-  "puta", "imbécil", "malparido", "maldito", "asqueroso",
-  "mierda", "pedo", "pendejo", "perra", "zorra", "culo"
+  "idiota", "estúpido", "put@", "imbecil", "malparido", "perra", "mierda", "nazi",
+  "zorra", "pene", "vagina", "sexo", "violación", "violador", "pedofilia", "nude", "nudes"
 ];
 
-// Modera un mensaje antes de enviarlo
-function moderarMensaje(mensaje, usuario) {
-  const texto = mensaje.toLowerCase();
-  const contiene = palabrasProhibidas.some(palabra => texto.includes(palabra));
+// Función que valida un mensaje antes de enviarlo
+function moderarMensaje(texto, usuario) {
+  const textoLimpio = texto.toLowerCase();
 
-  if (contiene) {
-    // Mostrar alerta al moderador o al mismo usuario
-    mostrarNotificacion("¡Mensaje bloqueado!", `Lenguaje inapropiado detectado de ${usuario}`, "error");
+  const contieneOfensa = palabrasProhibidas.some(palabra =>
+    textoLimpio.includes(palabra)
+  );
 
-    console.warn(`Mensaje bloqueado de ${usuario}: ${mensaje}`);
-    return false; // mensaje no permitido
+  if (contieneOfensa) {
+    alert(`El mensaje contiene palabras ofensivas y fue bloqueado.`);
+    console.warn(`Mensaje bloqueado de ${usuario}: "${texto}"`);
+    return false;
   }
 
-  return true; // mensaje permitido
+  return true;
 }
 
 export { moderarMensaje };
