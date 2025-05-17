@@ -13,93 +13,66 @@
     }
 
     h2 {
+      text-align: center;
       color: #00ffff;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
-    section {
-      background: rgba(255, 255, 255, 0.05);
+    .zona {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid #00ffff22;
+      border-left: 4px solid #00ffff;
       padding: 20px;
       border-radius: 12px;
       margin-bottom: 30px;
-      border-left: 4px solid #00ffff55;
-    }
-
-    label {
-      display: block;
-      margin-top: 10px;
-      margin-bottom: 5px;
-      font-weight: bold;
-      color: #00ffff;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 10px;
-      background: #111;
-      color: white;
     }
 
     button {
-      margin-top: 15px;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
       background: #00ffff;
       color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
     }
 
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    ul li {
-      background: #111;
-      margin-bottom: 10px;
-      padding: 10px;
-      border-radius: 8px;
+    p.estado {
+      color: #00ff88;
       font-size: 14px;
-      color: #ccc;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 500px) {
+      button {
+        font-size: 15px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <h2>Centro de Seguridad</h2>
+  <h2>Seguridad de tu cuenta</h2>
 
-  <section>
-    <h3>Autenticación en Dos Pasos</h3>
-    <button id="btnActivar2FA">Activar 2FA</button>
-    <button id="btnDesactivar2FA">Desactivar 2FA</button>
-  </section>
+  <div class="zona">
+    <h3>Verificación de correo</h3>
+    <button id="btnVerificarEmail">Enviar verificación</button>
+    <p id="estadoVerificacion" class="estado"></p>
+  </div>
 
-  <section>
-    <h3>Cambiar Contraseña</h3>
-    <label for="nuevaPassword">Nueva Contraseña</label>
-    <input type="password" id="nuevaPassword" placeholder="*********" />
-    <button id="btnCambiarPassword">Cambiar Contraseña</button>
-  </section>
-
-  <section>
-    <h3>Dispositivos / Sesiones Recientes</h3>
-    <ul id="listaSesiones">
-      <!-- Se llena dinámicamente -->
-    </ul>
-  </section>
-
-  <!-- Melizza -->
-  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
+  <div class="zona">
+    <h3>Recuperación de contraseña</h3>
+    <button id="btnResetPassword">Solicitar restablecimiento</button>
+    <p id="estadoPassword" class="estado"></p>
+  </div>
 
   <!-- Scripts -->
   <script type="module" src="./js/firebase-config.js"></script>
   <script type="module" src="./js/seguridad-control.js"></script>
   <script type="module" src="./js/notificaciones-control.js"></script>
-  <script type="module" src="./js/melizza-control.js"></script>
 
 </body>
 </html>
