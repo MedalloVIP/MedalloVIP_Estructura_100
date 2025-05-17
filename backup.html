@@ -41,6 +41,31 @@
       margin-top: 30px;
       color: #00ff88;
     }
+
+    #melizzaBurbuja {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: 0 0 15px #ff00ff99;
+    }
+
+    #notificacionToast {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(0,0,0,0.8);
+      padding: 12px 18px;
+      border-radius: 10px;
+      color: #00ffff;
+      font-size: 14px;
+      display: none;
+      z-index: 10000;
+    }
   </style>
 </head>
 <body>
@@ -48,16 +73,18 @@
   <h2>Respaldo de Cuenta</h2>
 
   <div class="info">
-    Puedes generar una copia de seguridad con tu configuración, historial, tokens, y datos clave asociados a tu cuenta.  
-    Este respaldo se descargará localmente y no es compartido sin tu autorización.
+    Puedes generar una copia de seguridad con tu configuración, historial, tokens y datos clave asociados a tu cuenta.
+    Este respaldo se descargará localmente y no será compartido sin tu autorización.
   </div>
 
   <button id="btnGenerarBackup">Generar Backup</button>
-
   <p id="status"></p>
 
-  <!-- Melizza -->
-  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
+  <!-- Melizza flotante -->
+  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" title="¿Necesitas ayuda?" />
+
+  <!-- Notificación visual -->
+  <div id="notificacionToast"></div>
 
   <!-- Scripts -->
   <script type="module" src="./js/firebase-config.js"></script>
