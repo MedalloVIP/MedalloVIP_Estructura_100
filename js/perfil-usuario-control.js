@@ -1,32 +1,82 @@
 // perfil-usuario-control.js
 
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, updateProfile, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { app } from "./firebase-config.js";
 import { mostrarNotificacion } from "./notificaciones-control.js";
 
-const auth = getAuth(app);
+// Elementos del DOM
+const inputNombre = document.getElementById("nombreUsuario");
+const inputBiografia = document.getElementById("bioUsuario");
+const inputRedSocial = document.getElementById("redUsuario");
+const btnGuardar = document.getElementById("btnGuardarUsuario");
+const visorResumen = document.getElementById("resumenUsuario");
 
-const infoNombre = document.getElementById("nombreUsuario");
-const infoCorreo = document.getElementById("correoUsuario");
-const infoFavoritos = document.getElementById("favoritosUsuario");
-const infoTokens = document.getElementById("tokensUsuario");
-const btnIrExplorar = document.getElementById("btnExplorar");
+let usuarioActual = null;
 
-// Detectar usuario activo
-auth.onAuthStateChanged(user => {
-  if (user) {
-    if (infoNombre) infoNombre.textContent = user.displayName || "Usuario VIP";
-    if (infoCorreo) infoCorreo.textContent = user.email;
+// Cargar datos del perfil
+function cargarPerfilUsuario(user) {
+  const email = user.email;
+  const datos = JSON.parse(localStorage.getItem(`usuario_${email}`)) || {
+    nombre: user.displayName || "",
+    biografia: "",
+    red: ""
+  };
 
-    // Datos simulados
-    if (infoFavoritos) infoFavoritos.textContent = "6 modelos favoritas";
-    if (infoTokens) infoTokens.textContent = "1,200 tokens disponibles";
+  inputNombre.value = datos.nombre;
+  inputBiografia.value = datos.biografia;
+  inputRedSocial.value = datos.red;
 
-    mostrarNotificacion("Bienvenido", "Tu perfil está listo para explorar", "éxito");
+  if (visorResumen) {
+    visorResumen.innerHTML = `
+      <p><strong>Correo:</strong> ${email}</p>
+      <p><strong>Nombre:</strong> ${datos.nombre || "No definido"}</p>
+      <p><strong>Red favorita:</strong> ${datos.red || "No asignada"}</p>
+    `;
   }
-});
+}
 
-// Ir a explorar transmisiones
-btnIrExplorar?.addEventListener("click", () => {
-  window.location.href = "./descubrir.html";
-});
+// Guardar cambios del perfil
+function guardarPerfilUsuario() {
+  const nombre = inputNombre.value.trim();
+  const biografia = inputBiografia.value.trim();
+  const red = inputRedSocial.value.trim();
+
+  if (!nombre) {
+    mostrarNotificacion("Nombre requerido", "El nombre no puede estar vacío", "warning");
+    return;
+  }
+
+  updateProfile(usuarioActual, {
+    displayName: nombre
+  })
+    .then(() => {
+      const datos = { nombre, biografia, red };
+      localStorage.setItem(`usuario_${usuarioActual.email}`, JSON.stringify(datos));
+      mostrarNotificacion("Perfil actualizado", "Tu perfil fue guardado con éxito", "success");
+      cargarPerfilUsuario(usuarioActual);
+    })
+    .catch((error) => {
+      console.error(error);
+      mostrarNotificacion("Error", "No se pudo actualizar tu perfil", "error");
+    });
+}
+
+// Inicializar módulo
+function inicializarPerfilUsuario() {
+  if (!inputNombre || !inputBiografia || !inputRedSocial || !btnGuardar) {
+    console.warn("Faltan campos del perfil de usuario.");
+    return;
+  }
+
+  onAuthStateChanged(getAuth(app), (user) => {
+    if (user) {
+      usuarioActual = user;
+      cargarPerfilUsuario(user);
+      btnGuardar.addEventListener("click", guardarPerfilUsuario);
+    } else {
+      mostrarNotificacion("No autenticado", "Inicia sesión para gestionar tu perfil", "warning");
+    }
+  });
+}
+
+window.addEventListener("DOMContentLoaded", inicializarPerfilUsuario);
