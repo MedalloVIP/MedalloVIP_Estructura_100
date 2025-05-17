@@ -1,61 +1,72 @@
 // historial-compras-control.js
 
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { app } from "./firebase-config.js";
 import { mostrarNotificacion } from "./notificaciones-control.js";
 
-const historialClave = "comprasMedalloVIP";
-const visorHistorial = document.getElementById("zonaHistorialCompras");
+const auth = getAuth(app);
+const visorHistorial = document.getElementById("historialCompras");
 
-// Obtener historial de compras
-function obtenerCompras() {
-  const data = localStorage.getItem(historialClave);
-  return data ? JSON.parse(data) : [];
-}
+let usuarioActual = null;
 
-// Mostrar compras guardadas
-function mostrarHistorial() {
-  const compras = obtenerCompras();
+// Historial simulado para beta
+const historialSimulado = [
+  { producto: "Pack Lencería VIP", tokens: 800, fecha: "2025-05-10", estado: "Entregado" },
+  { producto: "Show privado con Aylin", tokens: 1200, fecha: "2025-05-11", estado: "Completado" },
+  { producto: "Accesorio especial", tokens: 400, fecha: "2025-05-13", estado: "Pendiente" }
+];
 
+// Mostrar historial en la interfaz
+function renderizarHistorial() {
   if (!visorHistorial) return;
 
   visorHistorial.innerHTML = "";
 
-  if (compras.length === 0) {
-    visorHistorial.innerHTML = "<p style='color: #ccc;'>No has realizado compras todavía.</p>";
+  if (historialSimulado.length === 0) {
+    visorHistorial.innerHTML = "<p style='color:#aaa;'>No tienes compras registradas aún.</p>";
     return;
   }
 
-  compras.forEach(compra => {
+  historialSimulado.forEach(compra => {
     const item = document.createElement("div");
+    item.className = "item-historial";
     item.style = `
-      background: rgba(255,255,255,0.05);
-      padding: 12px;
-      margin-bottom: 8px;
-      border-left: 3px solid #00ffff;
-      border-radius: 6px;
+      background: #111;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      color: white;
+      border-left: 4px solid ${compra.estado === "Pendiente" ? "#ffaa00" : "#00ff88"};
     `;
+
     item.innerHTML = `
       <strong>${compra.producto}</strong><br>
-      <span>${compra.tokens} tokens</span><br>
-      <small>${compra.fecha}</small>
+      Tokens: <span style="color:#00ffff;">${compra.tokens}</span><br>
+      Fecha: <span style="color:#ccc;">${compra.fecha}</span><br>
+      Estado: <span style="color:${compra.estado === "Pendiente" ? "#ffaa00" : "#00ff88"};">${compra.estado}</span>
     `;
+
     visorHistorial.appendChild(item);
   });
 
-  mostrarNotificacion("Historial cargado", "Compras anteriores disponibles", "info");
+  mostrarNotificacion("Historial cargado", "Tus compras han sido listadas correctamente", "info");
 }
 
-// Simulación de agregar una compra (llamar desde pagos-control.js)
-function registrarCompra(producto, tokens) {
-  const compras = obtenerCompras();
-  compras.push({
-    producto,
-    tokens,
-    fecha: new Date().toLocaleString("es-CO")
+// Inicializar historial
+function inicializarHistorialCompras() {
+  if (!visorHistorial) {
+    console.warn("No se encontró el contenedor del historial.");
+    return;
+  }
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      usuarioActual = user;
+      renderizarHistorial();
+    } else {
+      visorHistorial.innerHTML = "<p style='color:#aaa;'>Inicia sesión para ver tu historial de compras.</p>";
+    }
   });
-  localStorage.setItem(historialClave, JSON.stringify(compras));
 }
 
-window.addEventListener("DOMContentLoaded", mostrarHistorial);
-
-// Exportar para registrar desde otro módulo
-export { registrarCompra };
+window.addEventListener("DOMContentLoaded", inicializarHistorialCompras);
