@@ -17,29 +17,39 @@
       margin-bottom: 20px;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    th, td {
+    .registro-auditoria {
       padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #00ffff22;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      font-size: 14px;
     }
 
-    th {
-      background-color: #111;
+    .registro-auditoria strong {
       color: #00ffff;
     }
 
-    tr:nth-child(even) {
-      background-color: #111111;
+    #melizzaBurbuja {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: 0 0 15px #ff00ff99;
     }
 
-    tr:hover {
-      background-color: #222;
+    #notificacionToast {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(0,0,0,0.8);
+      padding: 12px 18px;
+      border-radius: 10px;
+      color: #00ffff;
+      font-size: 14px;
+      display: none;
+      z-index: 10000;
     }
   </style>
 </head>
@@ -47,22 +57,15 @@
 
   <h2>Registro de Auditoría</h2>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Fecha</th>
-        <th>Usuario</th>
-        <th>Acción</th>
-        <th>Módulo</th>
-      </tr>
-    </thead>
-    <tbody id="tablaAuditoria">
-      <!-- Contenido dinámico -->
-    </tbody>
-  </table>
+  <div id="registroAuditoria">
+    <!-- Carga dinámica de registros -->
+  </div>
 
-  <!-- Melizza -->
-  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" />
+  <!-- Asistente IA -->
+  <img id="melizzaBurbuja" src="./imagenes/melizza-burbuja.png" alt="Melizza" title="¿Necesitas ayuda?" />
+
+  <!-- Notificaciones -->
+  <div id="notificacionToast"></div>
 
   <!-- Scripts -->
   <script type="module" src="./js/firebase-config.js"></script>
