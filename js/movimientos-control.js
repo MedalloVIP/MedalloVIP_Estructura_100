@@ -1,49 +1,75 @@
 // movimientos-control.js
 
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { app } from "./firebase-config.js";
 import { mostrarNotificacion } from "./notificaciones-control.js";
 
-// Movimientos simulados
-const historial = [
-  { tipo: "recarga", detalle: "Recarga manual", cantidad: 1000, fecha: "2025-05-10 08:12" },
-  { tipo: "propina", detalle: "Enviada a Valentina", cantidad: -300, fecha: "2025-05-10 08:34" },
-  { tipo: "premio", detalle: "200 tokens por meta completada", cantidad: 200, fecha: "2025-05-10 09:01" },
-  { tipo: "retiro", detalle: "Transferencia bancaria", cantidad: -1000, fecha: "2025-05-10 09:55" }
+const auth = getAuth(app);
+const visorMovimientos = document.getElementById("listaMovimientos");
+
+let usuarioActual = null;
+
+// Simulación de movimientos
+const movimientosSimulados = [
+  { tipo: "Recarga", monto: 5000, moneda: "tokens", fecha: "2025-05-10", estado: "Completado" },
+  { tipo: "Retiro", monto: 3000, moneda: "tokens", fecha: "2025-05-11", estado: "Pendiente" },
+  { tipo: "Propina recibida", monto: 800, moneda: "tokens", fecha: "2025-05-12", estado: "Completado" },
+  { tipo: "Compra en tienda", monto: 1200, moneda: "tokens", fecha: "2025-05-13", estado: "Completado" }
 ];
 
-// Mostrar historial
-function mostrarMovimientos() {
-  const contenedor = document.getElementById("historialTokens");
+// Renderizar los movimientos
+function renderizarMovimientos() {
+  if (!visorMovimientos) return;
 
-  if (!contenedor) {
-    console.error("No se encontró el contenedor de historial");
+  visorMovimientos.innerHTML = "";
+
+  if (movimientosSimulados.length === 0) {
+    visorMovimientos.innerHTML = "<p style='color:#aaa;'>Aún no hay movimientos registrados.</p>";
     return;
   }
 
-  contenedor.innerHTML = "";
-
-  historial.forEach((mov) => {
+  movimientosSimulados.forEach(mov => {
     const item = document.createElement("div");
-    item.className = "movimiento-item";
+    item.className = "movimiento";
     item.style = `
+      background: #111;
       padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      border-left: 4px solid ${
+        mov.estado === "Pendiente" ? "#ffaa00" : "#00ff88"
+      };
+      color: white;
     `;
-
-    const signo = mov.cantidad > 0 ? "+" : "";
-    const color = mov.cantidad >= 0 ? "#00ff99" : "#ff4444";
 
     item.innerHTML = `
-      <span>${mov.detalle} <br><small style="color: #999;">${mov.fecha}</small></span>
-      <span style="color: ${color}; font-weight: bold;">${signo}${mov.cantidad} tokens</span>
+      <strong>${mov.tipo}</strong><br>
+      <span style="color:#00ffff;">${mov.monto} ${mov.moneda}</span><br>
+      <span style="color:#ccc;">${mov.fecha}</span><br>
+      <span style="color:${mov.estado === "Pendiente" ? "#ffaa00" : "#00ff88"};">${mov.estado}</span>
     `;
 
-    contenedor.appendChild(item);
+    visorMovimientos.appendChild(item);
   });
 
-  mostrarNotificacion("Movimientos actualizados", "Se cargó el historial de tokens", "info");
+  mostrarNotificacion("Movimientos actualizados", "Lista de transacciones cargada", "info");
 }
 
-window.addEventListener("DOMContentLoaded", mostrarMovimientos);
+// Inicializar módulo
+function inicializarMovimientos() {
+  if (!visorMovimientos) {
+    console.warn("No se encontró el contenedor de movimientos.");
+    return;
+  }
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      usuarioActual = user;
+      renderizarMovimientos();
+    } else {
+      visorMovimientos.innerHTML = "<p style='color:#aaa;'>Inicia sesión para ver tus movimientos.</p>";
+    }
+  });
+}
+
+window.addEventListener("DOMContentLoaded", inicializarMovimientos);
