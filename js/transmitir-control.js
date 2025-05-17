@@ -1,45 +1,77 @@
-// transmitir-control.js
+// trasmitir-control.js
 
-import { connect } from "https://cdn.skypack.dev/livekit-client";
+import { connect, createLocalVideoTrack, createLocalAudioTrack } from "https://cdn.skypack.dev/livekit-client";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { app } from "./firebase-config.js";
 import { mostrarNotificacion } from "./notificaciones-control.js";
 
-// Elementos de la sala
-const videoElement = document.getElementById("videoTransmision");
-const iniciarBtn = document.getElementById("iniciarTransmisionBtn");
+// Elementos del DOM
+const videoElement = document.getElementById("videoModelo");
+const btnIniciar = document.getElementById("btnIniciarTransmision");
+const btnDetener = document.getElementById("btnDetenerTransmision");
 
-// Datos de conexión (LiveKit Cloud)
-const livekitURL = "wss://medallovip-zxlixdwt.livekit.cloud"; // Tu URL real
-const token = "AQUÍ_VA_TU_TOKEN_GENERADO"; // Generar desde backend o panel seguro
+const auth = getAuth(app);
 
-// Botón para iniciar la transmisión
-iniciarBtn?.addEventListener("click", async () => {
+let room = null;
+let usuario = null;
+
+// Configura LiveKit
+const URL_SERVIDOR = "wss://medallovip-zxlixdwt.livekit.cloud"; // Reemplaza si cambia
+let tokenLivekit = null; // Debe generarse dinámicamente en producción
+
+// Generador de token de prueba (solo para fase beta)
+function generarToken(nombreUsuario) {
+  // Solo para pruebas. En producción, se genera desde backend seguro
+  return fetch(`https://tu-backend.com/api/token?nombre=${nombreUsuario}`)
+    .then(res => res.text());
+}
+
+// Iniciar transmisión
+async function iniciarTransmision() {
+  if (!usuario) return;
+
   try {
-    const room = await connect(livekitURL, token, {
-      audio: true,
-      video: true,
-    });
+    mostrarNotificacion("Cargando", "Conectando a LiveKit...", "info");
 
-    const localParticipant = room.localParticipant;
-    const tracks = Array.from(localParticipant.videoTracks.values());
-
-    if (tracks.length > 0) {
-      const videoTrack = tracks[0].track;
-      videoTrack.attach(videoElement);
+    if (!tokenLivekit) {
+      tokenLivekit = await generarToken(usuario.email.split("@")[0]);
     }
 
-    mostrarNotificacion("¡Transmisión activa!", "Estás en vivo con MedalloVIP", "éxito");
+    room = await connect(URL_SERVIDOR, tokenLivekit);
 
-    // Eventos para monitorear el estado
-    room.on("participantConnected", participant => {
-      mostrarNotificacion("Usuario conectado", `${participant.identity} se unió a tu sala`, "info");
-    });
+    const videoTrack = await createLocalVideoTrack();
+    const audioTrack = await createLocalAudioTrack();
 
-    room.on("participantDisconnected", participant => {
-      mostrarNotificacion("Usuario desconectado", `${participant.identity} salió de la sala`, "info");
-    });
+    await room.localParticipant.publishTrack(videoTrack);
+    await room.localParticipant.publishTrack(audioTrack);
 
+    videoElement.srcObject = new MediaStream([videoTrack.mediaStreamTrack]);
+    videoElement.play();
+
+    mostrarNotificacion("Transmisión activa", "Estás en vivo", "success");
   } catch (error) {
-    console.error("Error al iniciar transmisión:", error);
-    mostrarNotificacion("Error", "No se pudo conectar la cámara", "error");
+    mostrarNotificacion("Error", "No se pudo iniciar la transmisión", "error");
+    console.error(error);
+  }
+}
+
+// Detener transmisión
+function detenerTransmision() {
+  if (room) {
+    room.disconnect();
+    videoElement.pause();
+    videoElement.srcObject = null;
+    mostrarNotificacion("Transmisión finalizada", "Se cerró la sala", "info");
+  }
+}
+
+// Autenticación del modelo
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    usuario = user;
+    if (btnIniciar) btnIniciar.addEventListener("click", iniciarTransmision);
+    if (btnDetener) btnDetener.addEventListener("click", detenerTransmision);
+  } else {
+    mostrarNotificacion("Inicia sesión", "Solo modelos pueden transmitir", "warning");
   }
 });
