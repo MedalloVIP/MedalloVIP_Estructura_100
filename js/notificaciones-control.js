@@ -1,49 +1,62 @@
 // notificaciones-control.js
 
-// Mostrar notificación en pantalla con sonido
-export function mostrarNotificacion(titulo, mensaje, tipo = "info") {
-  const contenedor = document.createElement("div");
+// Crear contenedor si no existe
+let contenedorNotificaciones = document.getElementById("contenedorNotificaciones");
 
-  contenedor.style = `
+if (!contenedorNotificaciones) {
+  contenedorNotificaciones = document.createElement("div");
+  contenedorNotificaciones.id = "contenedorNotificaciones";
+  contenedorNotificaciones.style = `
     position: fixed;
     top: 20px;
     right: 20px;
-    background: ${tipo === "éxito" ? "#00ff99" : tipo === "error" ? "#ff4444" : "#00ffff"};
-    color: black;
-    padding: 16px 20px;
-    border-radius: 12px;
-    font-weight: bold;
-    font-family: sans-serif;
-    box-shadow: 0 0 15px ${tipo === "éxito" ? "#00ffcc" : "#00ffff"};
     z-index: 9999;
-    opacity: 0.95;
-    animation: aparecer 0.4s ease-out;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  `;
+  document.body.appendChild(contenedorNotificaciones);
+}
+
+// Mostrar notificación global
+function mostrarNotificacion(titulo, mensaje, tipo = "info", duracion = 4000) {
+  const noti = document.createElement("div");
+  noti.className = "notificacion";
+  noti.style = `
+    background: ${obtenerColor(tipo)};
+    color: white;
+    padding: 12px 18px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px ${obtenerColor(tipo)};
+    font-size: 14px;
+    min-width: 220px;
+    max-width: 300px;
+    animation: slideIn 0.4s ease-out;
   `;
 
-  contenedor.innerHTML = `<strong>${titulo}</strong><br>${mensaje}`;
-  document.body.appendChild(contenedor);
+  noti.innerHTML = `
+    <strong style="display:block; font-size:15px;">${titulo}</strong>
+    <span>${mensaje}</span>
+  `;
 
-  // Reproduce sonido correspondiente
-  reproducirSonido(tipo);
+  contenedorNotificaciones.appendChild(noti);
 
-  // Elimina después de 4 segundos
   setTimeout(() => {
-    contenedor.remove();
-  }, 4000);
+    noti.style.opacity = "0";
+    setTimeout(() => contenedorNotificaciones.removeChild(noti), 300);
+  }, duracion);
 }
 
-// Reproduce sonido según el tipo de notificación
-function reproducirSonido(tipo) {
-  let audio = new Audio();
-
-  if (tipo === "éxito") {
-    audio.src = "./sonidos/exito.mp3";
-  } else if (tipo === "error") {
-    audio.src = "./sonidos/error.mp3";
-  } else {
-    audio.src = "./sonidos/notificacion.mp3";
+// Devuelve color según el tipo
+function obtenerColor(tipo) {
+  switch (tipo) {
+    case "success": return "#00cc88";
+    case "error": return "#ff4444";
+    case "warning": return "#ffaa00";
+    case "info":
+    default: return "#00ffff";
   }
-
-  audio.volume = 0.6;
-  audio.play();
 }
+
+// Exportar la función para usar globalmente
+export { mostrarNotificacion };
